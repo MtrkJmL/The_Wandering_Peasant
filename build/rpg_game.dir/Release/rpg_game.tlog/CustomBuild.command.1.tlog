@@ -1,0 +1,10 @@
+^C:\USERS\MUSTAFA\DESKTOP\CPP-RPG\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Mustafa/Desktop/cpp-rpg -BC:/Users/Mustafa/Desktop/cpp-rpg/build --check-stamp-file C:/Users/Mustafa/Desktop/cpp-rpg/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

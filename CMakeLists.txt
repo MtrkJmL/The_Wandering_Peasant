@@ -12,6 +12,7 @@ add_executable(rpg_game
     src/Item.cpp
     src/NPC.cpp
     src/Relic.cpp
+    src/Terrain.cpp
 )
 
 target_include_directories(rpg_game PRIVATE include) 

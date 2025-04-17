@@ -1,0 +1,3 @@
+C:/Users/Mustafa/Desktop/cpp-rpg/build/CMakeFiles/rpg_game.dir
+C:/Users/Mustafa/Desktop/cpp-rpg/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Mustafa/Desktop/cpp-rpg/build/CMakeFiles/ZERO_CHECK.dir
