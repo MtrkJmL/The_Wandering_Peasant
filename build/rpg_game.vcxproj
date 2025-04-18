@@ -340,6 +340,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\NPC.cpp" />
     <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Relic.cpp" />
     <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Terrain.cpp" />
+    <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Blessing.cpp" />
+    <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Village.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
