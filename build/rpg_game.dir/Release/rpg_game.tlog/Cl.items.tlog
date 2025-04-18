@@ -5,3 +5,6 @@ C:\Users\Mustafa\Desktop\cpp-rpg\src\Game.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\b
 C:\Users\Mustafa\Desktop\cpp-rpg\src\Item.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\Item.obj
 C:\Users\Mustafa\Desktop\cpp-rpg\src\NPC.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\NPC.obj
 C:\Users\Mustafa\Desktop\cpp-rpg\src\Relic.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\Relic.obj
+C:\Users\Mustafa\Desktop\cpp-rpg\src\Terrain.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\Terrain.obj
+C:\Users\Mustafa\Desktop\cpp-rpg\src\Blessing.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\Blessing.obj
+C:\Users\Mustafa\Desktop\cpp-rpg\src\Village.cpp;C:\Users\Mustafa\Desktop\cpp-rpg\build\rpg_game.dir\Release\Village.obj
