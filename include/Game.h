@@ -5,6 +5,7 @@
 #include "NPC.h"
 #include "Relic.h"
 #include "Terrain.h"
+#include "Village.h"
 #include <vector>
 #include <string>
 #include <random>

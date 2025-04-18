@@ -66,7 +66,7 @@ Enemy::Enemy(const std::string& name, int level, EnemyType type)
             experienceReward += 20;
             break;
         case EnemyType::DRAGON:
-            weapon = Item(ItemType::WEAPON, "Dragon Claws", baseDice + 3, 10, baseModifier + 3);
+            weapon = Item(ItemType::WEAPON, "Dragon Claws", baseDice + 2, 10, baseModifier + 3);
             armor = Item(ItemType::ARMOR, "Dragon Scales", baseDice + 2, 8, baseModifier + 2);
             goldReward += 50;
             experienceReward += 50;

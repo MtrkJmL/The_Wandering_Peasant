@@ -413,8 +413,8 @@ void Game::handleNPCInteraction(NPCType type) {
                 case 1:
                     if (player.getGold() >= static_cast<int>(50/player.getBriberySkill())) {
                         player.addGold(-static_cast<int>(50/player.getBriberySkill()));
-                        player.heal(30);
-                        std::cout << "You bought a health potion and restored 30 health!\n";
+                        player.heal(100);
+                        std::cout << "You bought a health potion and restored 100 health!\n";
                     } else {
                         std::cout << "Not enough gold!\n";
                     }
@@ -446,10 +446,12 @@ void Game::handleNPCInteraction(NPCType type) {
             }
             break;
         case NPCType::AHMED:
+            NPC npc(NPCType::AHMED);
             std::cout << "\nAhmed the Wise Tit: 'Ah, a traveler! I can teach you many things.'\n";
             std::cout << "1. Learn about enemies\n";
             std::cout << "2. Learn to bribe\n";
-            std::cout << "3. Leave\n";
+            std::cout << "3. Seek tales of the Bard's songs\n";
+            std::cout << "4. Leave\n";
             std::cout << "Choice: ";
             
             std::cin >> choice;
@@ -493,6 +495,68 @@ void Game::handleNPCInteraction(NPCType type) {
                     std::cout << "Your bribery skill is now " << static_cast<int>(player.getBriberySkill() * 100) << "%!\n";
                     break;
                 case 3:
+                    std::cout << "Which song would you like to hear?\n";
+                    std::cout << "1. Ballad of Kirik\n";
+                    std::cout << "2. Whispers of the Wyrm\n";
+                    std::cout << "3. Eclipsefire Lament\n";
+                    std::cout << "4. March of the Lost Crowns\n";
+                    std::cout << "5. Dirge of the Darkbloods\n";
+                    std::cout << "6. Hymns from the Hollow\n";
+                    std::cout << "7. Tavern Tune of Glory\n";
+                    std::cout << "8. Ode to the Last Flame\n";
+                    std::cout << "9. Dance of the Starbound\n";
+                    std::cout << "10. Chant of the Moonwatchers\n";
+                    std::cout << "Choice: ";
+                    int songChoice;
+                    std::cin >> songChoice;
+                    Beep(200,100);
+                    switch (songChoice) {       
+                        case 1:
+                            std::cout << "Ahmed sings the Ballad of Kirik:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::BALLAD_OF_KIRIK) << "\n";
+                            break;
+                        case 2:
+                            std::cout << "Ahmed sings the Whispers of the Wyrm:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::WHISPERS_OF_THE_WYRM) << "\n";
+                            break;
+                        case 3:
+                            std::cout << "Ahmed sings the Eclipsefire Lament:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::ECLIPSEFIRE_LAMENT) << "\n";
+                            break;
+                        case 4:
+                            std::cout << "Ahmed sings the March of the Lost Crowns:\n";     
+                            std::cout << npc.getBardSongVerse(BardSong::MARCH_OF_THE_LOST_CROWNS) << "\n";
+                            break;
+                        case 5:
+                            std::cout << "Ahmed sings the Dirge of the Darkbloods:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::DIRGE_OF_THE_DARKBLOODS) << "\n";
+                            break;
+                        case 6:
+                            std::cout << "Ahmed sings the Hymns from the Hollow:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::HYMNS_FROM_THE_HOLLOW) << "\n";
+                            break;
+                        case 7:
+                            std::cout << "Ahmed sings the Tavern Tune of Glory:\n";         
+                            std::cout << npc.getBardSongVerse(BardSong::TAVERN_TUNE_OF_GLORY) << "\n";              
+                            break;
+                        case 8:
+                            std::cout << "Ahmed sings the Ode to the Last Flame:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::ODE_TO_THE_LAST_FLAME) << "\n";
+                            break;
+                        case 9:
+                            std::cout << "Ahmed sings the Dance of the Starbound:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::DANCE_OF_THE_STARBOUND) << "\n";
+                            break;
+                        case 10:
+                            std::cout << "Ahmed sings the Chant of the Moonwatchers:\n";
+                            std::cout << npc.getBardSongVerse(BardSong::CHANT_OF_THE_MOONWATCHERS) << "\n";
+                            break;
+                        default:
+                            std::cout << "Ahmed: 'Alas, that tune is beyond my knowledge.'\n";
+                            break;
+                    }
+                    break;
+                case 4:
                     std::cout << "Ahmed: 'Come back when you need wisdom!'\n";
                     break;
                 default:
@@ -510,6 +574,13 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
     player.startBattle();
     int bleedStack = 1;
     int reflectStack = 0;
+    bool isActivated = false;
+    int crushingMomentum = 3;
+    bool berxesActive = false;
+    bool kirikActive = false;
+    bool stadinActive = false;
+    int stillnessOfStone = 3;
+    player.resetBlessingUsed();
     while (enemy.isAlive() && player.isAlive()) {
         // Clear screen and display battle UI
         std::cout << "\n\n";
@@ -573,6 +644,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         std::cout << "3. Rest - Recover stamina\n";
         std::cout << "4. Talk - Try to communicate\n";
         std::cout << "5. Bribe (" << static_cast<int>(enemy.getBribeCost() / player.getBriberySkill()) << " gold)\n";
+        std::cout << "6. Activate Blessing: " << player.getEquippedBlessing().getName() << "\n";
         std::cout << "Choice: ";
         
         int choice;
@@ -675,6 +747,17 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     damage = 0;
                 }
                 if (damage > 0) {
+                    if(berxesActive && player.getEquippedBlessing().getName() == "Titan's Wrath"){
+                        damage *= 3;
+                        player.takeDamage(20);
+                        std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
+                        player.useBlessing();
+                    }
+                    if(berxesActive && player.getEquippedBlessing().getName() == "Crushing Momentum"){
+                        player.heal(damage);
+                        std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
+                        player.useBlessing();
+                    }
                     enemy.takeDamage(damage);
                     std::cout << "\nYou strike with your " << player.getWeapon().getName() << "!\n";
                     std::cout << "Damage dealt: " << damage << "\n";
@@ -781,6 +864,46 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 }
                 break;
             }
+            case 6: {
+                if(player.hasUsedBlessing()){
+                    std::cout << "You already activated your blessing!\n";
+                    break;
+                }
+                std::cout << "You activate your " << player.getEquippedBlessing().getName() << "!\n";
+                if(player.getEquippedBlessing().getRarity() == BlessingRarity::KIRIK){
+                    kirikActive = true;
+                } else if(player.getEquippedBlessing().getRarity() == BlessingRarity::BERXES){
+                    berxesActive = true;
+                } else if(player.getEquippedBlessing().getRarity() == BlessingRarity::STADIN){
+                    stadinActive = true;
+                }
+                if(player.getEquippedBlessing().getName() == "Stadin Life" && !player.hasUsedBlessing()){
+                    player.heal(50);
+                    std::cout << "Champion Stadin's ambition from battlefield echoes through the skies.\n";
+                    std::cout << "You regain 50 health!\n";
+                    player.useBlessing();
+                }
+                if (player.getEquippedBlessing().getName() == "Pierce the Veil" && !player.hasUsedBlessing()) {
+                    
+                    enemy.applyBleeding(); 
+                    
+                    enemy.applyPoison(); 
+                     
+                    enemy.applyBlindness(); 
+                     
+
+
+                    // Shuffle the vector to randomize the order
+                    
+                    std::cout << "Champion KIRIK's ambition from battlefield cracks the silence of the heavens.\n";
+                    std::cout << "The enemy is now bleeding, poisoned, and blinded!\n";
+                    player.useBlessing();
+                }
+                if (player.getEquippedBlessing().getName() == "Echo of Agony" && !player.hasUsedBlessing()){
+                    player.useBlessing();
+                }
+                break;
+            }
             default:
                 std::cout << "Invalid choice! You hesitate and lose your turn.\n";
                 break;
@@ -795,7 +918,13 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         if (enemy.isBleeding()) {
             for(int i = 0; i < bleedStack; i++) {   
                 enemy.takeBleedingDamage();
+                
                 std::cout << "Each movement deepens their wounds — blood drips to the earth below!" << enemyName << " takes 2 damage from bleeding!\n";
+                if(kirikActive && player.getEquippedBlessing().getName() == "Echo of Agony"){
+                    enemy.takeBleedingDamage();
+                    std::cout << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n";
+                    std::cout << enemyName << " takes 2 damage from bleeding!\n";
+                }
             }
         }
         int enemyRolled = enemy.rollAttack();
@@ -803,11 +932,11 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
         if(terrain.shouldReflect()) {
             if(reflectStack < 3) {
-            std::cout << "The Dragon King readies Eclipsefire Catacylsm!\n";
+            std::cout << "The Dragon King readies Eclipsefire Catacylsm! (" <<reflectStack <<"/3)\n";
             reflectStack += 1;
             } else {
-                std::cout << "The Dragon King attacks with Eclipsefire Catacylsm!\n";
-                enemyRolled = 50;
+                std::cout << "The Dragon King attacks with Eclipsefire Catacylsm! (" <<reflectStack <<" stacks)\n";
+                enemyRolled = 100;
                 reflectStack = 0;
             }
         }
@@ -820,7 +949,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         
         if (enemy.isPoisoned()) {
             enemy.takePoisonDamage();
-            
+            if(kirikActive && player.getEquippedBlessing().getName() == "Echo of Agony"){
+                std::cout << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n";
+                enemy.takePoisonDamage();
+            }
         }
         if(enemy.getHealth() <= 0) {
             std::cout << enemyName << " with a final gasp, staggers forward, as if to strike one last time...\n\n";
@@ -836,6 +968,11 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             std::cout << "You feel the same ambition that once drove Lord KIRIK as he slew the ancient Dragon King on this summit.\n";
             std::cout << "The weight of his triumph echoes through the summit, granting you +2 defense!\n";
         }
+        if(stadinActive && player.getEquippedBlessing().getName() == "Stillness of Stone" && stillnessOfStone > 0){
+            playerRolled += 20;
+            std::cout << "Champion STADIN's ambition from battlefield echoes through the skies.\n";
+            stillnessOfStone -= 1;
+        }
         int enemyDamage = std::max(0, enemyRolled - playerRolled);
         if(terrain.getHealthModifier() > 0) {
             player.takeDamage(terrain.getHealthModifier());
@@ -850,7 +987,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             std::cout << "You raise your guard just in time — the attack glances off your weapon!\n";
         }
 
-        if (!enemy.isAlive()) {
+        if (!enemy.isAlive() && player.isAlive()) {
             std::cout << "\n╔══════════════════════════════════════════════╗\n";
             std::cout <<   "║            ⚔️  VICTORY ACHIEVED! ⚔️          ║\n";
             std::cout <<   "╚══════════════════════════════════════════════╝\n";
@@ -1122,10 +1259,10 @@ void Game::handleMarket() {
 
         std::cout << "\nItems for sale:\n";
         std::cout << "1. " << weapon.getName() << " " << weapon.getStatsString()
-                  << " (Cost: " << weapon.getValue() / player.getBriberySkill() << " gold, discount: "
+                  << " (Cost: " << static_cast<int>(weapon.getValue() / player.getBriberySkill()) << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
         std::cout << "2. " << armor.getName() << " " << armor.getStatsString()
-                  << " (Cost: " << armor.getValue() / player.getBriberySkill() << " gold, discount: "
+                  << " (Cost: " << static_cast<int>(armor.getValue() / player.getBriberySkill()) << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
         std::cout << "3. Reroll stocks (Cost: " << rerollCost << " gold)\n";
         std::cout << "4. Leave market\n";
@@ -1180,7 +1317,7 @@ void Game::handleMarket() {
 
 void Game::handleMiniBoss() {
     // Generate mini-boss
-    Enemy miniBoss("Mini-Boss", player.getLevel() + 3, EnemyType::DRAGON);
+    Enemy miniBoss("Mini-Boss", player.getLevel() + encounterCount/7, EnemyType::DRAGON);
     std::cout << "The air thickens...\n";
     std::cout << "\nPress Enter to continue...\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -1240,6 +1377,8 @@ void Game::handleMiniBoss() {
                 std::cout << "Invalid choice! You keep your current relic.\n";
                 break;
         }
+        Village village("Dragon's Summit");
+        village.enter(player, *this);
     }
     
     isMiniBossEncounter = false;

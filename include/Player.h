@@ -3,8 +3,9 @@
 #include "Item.h"
 #include <vector>
 #include "Enemy.h"
+#include "NPC.h"
 #include "Relic.h"
-
+#include "Blessing.h"
 class Player {
 private:
     std::string name;
@@ -22,7 +23,10 @@ private:
     int experienceToNextLevel;
     float briberySkill; //  represents 0% to 100% discount
     std::vector<EnemyType> knownEnemies; // Types of enemies we can talk to
+    std::vector<BardSong> knownBardSongs;
     Relic equippedRelic;
+    Blessing equippedBlessing;
+    bool blessingUsed = false;
     int attackCount; // For tracking attack count for relics
     bool isFirstAttack; // For Battle Horn relic
 
@@ -48,14 +52,20 @@ public:
     int getExperienceToNextLevel() const;
     float getBriberySkill() const;
     bool knowsEnemyType(EnemyType type) const;
+    bool knowsBardSong(BardSong song) const;
     const Relic& getEquippedRelic() const;
+    const Blessing& getEquippedBlessing() const;
     int getLuck() const;
     void setLuck(int amount);
     void setMaxStamina(int amount);
+    bool hasUsedBlessing() const;
+    void useBlessing();
+    void resetBlessingUsed();
     // Combat actions
     void takeDamage(int damage);
     void heal(int amount);
     void rest(); // Regain stamina
+    void pray();
     void useStamina(int amount);
     int lightAttack(); // Cost 1 stamina
     int heavyAttack(); // Cost 2 stamina
@@ -71,6 +81,7 @@ public:
     void setWeapon(const Item& newWeapon) { equipWeapon(newWeapon); }
     void setArmor(const Item& newArmor) { equipArmor(newArmor); }
     void equipRelic(const Relic& newRelic);
+    void equipBlessing(const Blessing& newBlessing);
     
     // Inventory
     void addItem(const Item& item);
@@ -90,6 +101,7 @@ public:
     // Skill methods
     void improveBriberySkill();
     void learnEnemyType(EnemyType type);
+    void learnBardSong(BardSong song);
     
     // Timing-based attack methods
     float getTimingMultiplier(int cursorPosition, int totalPositions) const;

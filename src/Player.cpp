@@ -8,7 +8,7 @@ Player::Player(const std::string& playerName)
       weapon(ItemType::WEAPON, "Rusty Sword", 1, 6, 2),
       armor(ItemType::ARMOR, "Leather Armor", 1, 6, 0),
       experienceToNextLevel(100), briberySkill(1.0f),
-      equippedRelic(), attackCount(0), isFirstAttack(true) {
+      equippedRelic(), equippedBlessing(), attackCount(0), isFirstAttack(true) {
 }
 
 std::string Player::getName() const { return name; }
@@ -37,6 +37,18 @@ Item& Player::getArmor() {
 
 const std::vector<Item>& Player::getInventory() const { return inventory; }
 int Player::getExperienceToNextLevel() const { return experienceToNextLevel; }
+
+bool Player::hasUsedBlessing() const {
+    return blessingUsed;
+}
+
+void Player::useBlessing() {
+    blessingUsed = true;
+}
+
+void Player::resetBlessingUsed() {
+    blessingUsed = false;
+}
 
 void Player::takeDamage(int damage) {
     health = std::max(0, health - damage);
@@ -194,6 +206,12 @@ void Player::addGold(int amount) {
     }
 }
 
+void Player::pray() {
+    maxHealth -= 20;
+    health = maxHealth;
+    std::cout << "You pray and sacrifice 20 max health.\n";
+}
+
 bool Player::spendGold(int amount) {
     if (gold >= amount) {
         gold -= amount;
@@ -216,8 +234,18 @@ void Player::learnEnemyType(EnemyType type) {
     }
 }
 
+void Player::learnBardSong(BardSong song) {
+    if (std::find(knownBardSongs.begin(), knownBardSongs.end(), song) == knownBardSongs.end()) {
+        knownBardSongs.push_back(song);
+    }
+}
+
 bool Player::knowsEnemyType(EnemyType type) const {
     return std::find(knownEnemies.begin(), knownEnemies.end(), type) != knownEnemies.end();
+}
+
+bool Player::knowsBardSong(BardSong song) const {
+    return std::find(knownBardSongs.begin(), knownBardSongs.end(), song) != knownBardSongs.end();
 }
 
 float Player::getBriberySkill() const {
@@ -226,6 +254,15 @@ float Player::getBriberySkill() const {
 
 const Relic& Player::getEquippedRelic() const {
     return equippedRelic;
+}
+
+const Blessing& Player::getEquippedBlessing() const {
+    return equippedBlessing;
+}
+
+void Player::equipBlessing(const Blessing& newBlessing) {
+    equippedBlessing = newBlessing;
+    std::cout << "Equipped " << newBlessing.getName() << ": " << newBlessing.getDescription() << "\n";
 }
 
 void Player::equipRelic(const Relic& newRelic) {
