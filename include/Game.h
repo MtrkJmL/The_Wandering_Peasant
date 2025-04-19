@@ -6,6 +6,8 @@
 #include "Relic.h"
 #include "Terrain.h"
 #include "Village.h"
+#include "Quest.h"
+#include "QuestManager.h"
 #include <vector>
 #include <string>
 #include <random>
@@ -40,6 +42,7 @@ private:
     void handleMiniBoss();
     
 public:
+    static QuestManager questManager;
     Game();
     void run();
 }; 

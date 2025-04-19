@@ -104,7 +104,7 @@ int Enemy::rollDefense() const {
     return armor.roll();
 }
 
-Item Enemy::generateDrop() const {
+Item Enemy::generateDrop(int luck) const {
     
     int roll = std::rand() % 100;
     ItemRarity rarity;
@@ -128,10 +128,12 @@ Item Enemy::generateDrop() const {
         default:
             break;
     }   
-    if (roll < 60-mod*level) {
+    if (roll < 65-mod*level/2-luck) {
         rarity = ItemRarity::COMMON;
-    } else if (roll < 85-mod*level) {
+    } else if (roll < 80-mod*level/2-luck/2) {
         rarity = ItemRarity::RARE;
+    } else if (roll < 95-mod*level/4-luck/4) {
+        rarity = ItemRarity::EPIC;
     } else {
         rarity = ItemRarity::LEGENDARY;
     }

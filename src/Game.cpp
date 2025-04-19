@@ -9,6 +9,7 @@
 #include <thread>
 #include <chrono>
 #include <conio.h>
+#include <iomanip>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -45,9 +46,10 @@ Game::Game() : player("Hero"), isRunning(false), totalEnemiesDefeated(0),
     system("chcp 65001 > nul");
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 }
-
+QuestManager Game::questManager;  // Definition of the static member
 void Game::run() {
     isRunning = true;
+    
     displayMainMenu();
 }
 
@@ -103,13 +105,17 @@ void Game::displayMainMenu() {
 }
 
 void Game::startNewGame() {
+    
+    questManager.addQuest(Quest("1", "Bitter Ballads", "Ahmed seeks vengeance on his rival who stole his song and his spotlight — put an end to the egomaniac’s tune once and for all."));
+    questManager.addQuest(Quest("2", "Banger of a Stone", "You’ve found a glowing stone with a note reading: 'Molto, here’s something for you to bang.' It’s time to find Molto and see what he can forge from this strange stone—who knows what chaos he’ll create."));
+    
     std::string playerName;
-    std::cout << "Your peasant is called: ";
+    std::cout << "\nYour peasant is called: ";
     std::cin >> playerName;
     
     player = Player(playerName);
     std::cout << playerName << " had a wonderful childhood.\n";
-    std::cout << "When it came to hide-and-seek, none could match him. Some said it was skill, others... something more. He always triumphed, for he was:\n";
+    std::cout << "\nWhen it came to hide-and-seek, none could match him. Some said it was skill, others... something more. He always triumphed, for he was:\n\n";
     std::cout << "1. ⚡ Fleet of Foot — “The wind itself envied his stride.” (+3 max stamina)\n";
     std::cout << "2. 🍀 Blessed by Lady Luck — “Dice rolled kindly, doors creaked just right, and shadows always favored him.” (+10 luck)\n";
     std::cout << "3. 🕳️ Cursed with Misfortune — “Ah, my mistake. This little one was a loser. Every twig snapped, every sneeze betrayed him. Even the trees seemed to point him out.” (-10 luck)\n";
@@ -189,19 +195,46 @@ void Game::startNewGame() {
 }
 
 void Game::displayPlayerStats() {
-    std::cout << "\n=== " << player.getName() << "'s Stats (as a peasant) ===\n";
-    std::cout << "Level: " << player.getLevel() << "\n";
-    std::cout << "Health: " << player.getHealth() << "/" << player.getMaxHealth() << "\n";
-    std::cout << "Stamina: " << player.getStamina() << "/" << player.getMaxStamina() << "\n";
-    std::cout << "Gold: " << player.getGold() << "\n";
-    std::cout << "Experience: " << player.getExperience() << "/" << player.getExperienceToNextLevel() << "\n";
-    
-    std::cout << "\nEquipment:\n";
-    std::cout << "Weapon: " << player.getWeapon().getName() << " " << player.getWeapon().getStatsString() << "\n";
-    std::cout << "Armor: " << player.getArmor().getName() << " " << player.getArmor().getStatsString() << "\n";
-    std::cout << "Relic: " << player.getEquippedRelic().getName() << " " << player.getEquippedRelic().getDescription() << "\n";
+    std::cout << "\n══════════════════════════════════════════════\n";
+    std::cout << "         📜 " << player.getName() << "'s Stats (Peasant)         \n";
+    std::cout << "══════════════════════════════════════════════\n";
 
-    std::cout << "\nPress Enter to continue...\n";
+    std::cout << "══════════════════╦═══════════════════════════\n";
+    std::cout << " Level            ║ " << std::setw(24) << player.getLevel() << " \n";
+    std::cout << " Health           ║ " << std::setw(6) << player.getHealth() 
+              << " / " << std::setw(14) << player.getMaxHealth() << " \n";
+    std::cout << " Stamina          ║ " << std::setw(6) << player.getStamina() 
+              << " / " << std::setw(14) << player.getMaxStamina() << " \n";
+    std::cout << " Gold             ║ " << std::setw(24) << player.getGold() << " \n";
+    std::cout << " Experience       ║ " << std::setw(6) << player.getExperience() 
+              << " / " << std::setw(14) << player.getExperienceToNextLevel() << " \n";
+    std::cout << "══════════════════╩═══════════════════════════\n";
+
+    std::cout << "\n🛡️  EQUIPMENT\n";
+    std::cout << "══════════════════════════════════════════════\n";
+    std::cout << " Weapon: " << std::setw(37) << std::left 
+              << (player.getWeapon().getName() + " " + player.getWeapon().getStatsString()) << " \n";
+    std::cout << " Armor : " << std::setw(37) << std::left 
+              << (player.getArmor().getName() + " " + player.getArmor().getStatsString()) << " \n";
+    std::cout << " Relic : " << std::setw(37) << std::left 
+              << (player.getEquippedRelic().getName() + " - " + player.getEquippedRelic().getDescription()) << " \n";
+    std::cout << "══════════════════════════════════════════════\n";
+
+    std::cout << "\n🧭 QUEST LOG\n";
+std::cout << "══════════════════════════════════════════════\n";
+    std::cout << "📌 Active Quests:\n";
+    // Active quests
+    questManager.showActiveQuests();
+
+    std::cout << "\n✅ Completed Quests:\n";
+    questManager.showCompletedQuests();
+        
+
+    
+
+std::cout << "\n══════════════════════════════════════════════\n";
+
+    std::cout << "\n🔸 Press Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 }
@@ -210,10 +243,10 @@ void Game::handleWandering() {
     encounterCount++;
     
     // Check for special encounters
-    if (encounterCount % 7 == 0) {
+    if (encounterCount % 11 == 0) {
         isMiniBossEncounter = true;
     }
-    if (encounterCount == 21) {
+    if (encounterCount == 33) {
         isFinalBossEncounter = true;
     }
     
@@ -309,7 +342,7 @@ void Game::handleBranchingPath() {
         rightEncounter = "A merchant displays his wares";
     } else {
         // Treasure
-        rightEncounter = "A pile of gold coins catches your eye";
+        rightEncounter = "A treasure chest catches your eye, gleaming with the allure of hidden riches";
     }
     
     std::cout << "1. Go left (" << leftEncounter << ")\n";
@@ -330,9 +363,32 @@ void Game::handleBranchingPath() {
             // Merchant encounter
             handleMarket();
         } else {
-            int goldAmount = (std::rand() % 50 + 10) * player.getLevel();
-            std::cout << "\nYou found " << goldAmount << " gold in the treasure chest!\n";
-            player.addGold(goldAmount);
+            int chestRoll = std::rand() % 100;
+            if (chestRoll < 10) {
+                int goldAmount = (std::rand() % 50 + 10) * player.getLevel();
+                std::cout << "\nYou found " << goldAmount << " gold in the treasure chest!\n";
+                player.addGold(goldAmount);
+            } else {
+                if(questManager.hasQuest("2") && questManager.getStatus("2") == QuestStatus::NOT_TAKEN){
+                    std::cout << R"(
+        You pry open the ancient treasure chest — the hinges groan like a dying beast.
+        Inside, nestled among faded baubles and forgotten relics, lies a glowing stone pulsing with heat.
+        A crumpled parchment rests beside it, scrawled with hasty ink:
+
+            'Molto, here’s something worthy of your eternal banging.'
+
+        The stone hums in your palm. Whoever this 'Molto' is, you sense the forge of fate is already burning.
+    )";
+                    
+                        questManager.takeQuest("2");
+                    }
+                else{
+                    int goldAmount = (std::rand() % 50 + 10) * player.getLevel() * 2;
+                    std::cout << "\nYou are in luck! You found " << goldAmount << " gold in the treasure chest!\n";
+                    player.addGold(goldAmount);
+
+                }
+            }
         }
     } else if (choice == 2) {
         // Handle right path
@@ -356,6 +412,43 @@ void Game::handleBranchingPath() {
 void Game::handleNPCInteraction(NPCType type) {
     switch (type) {
         case NPCType::BLACKSMITH:
+            if(player.getMoltoTalked() && questManager.hasQuest("2") && questManager.getStatus("2") == QuestStatus::TAKEN){
+                std::cout << R"(
+    'Ah, a peasant seeking craftsmanship, eh?' he grins, his eyes gleaming with pride. 
+    'What brings you to my humble forge, traveler?'
+
+    You present the gem, explaining Molto’s instructions.
+
+    The blacksmith raises an eyebrow, his grin widening. 
+    'Molto, eh? He knows his way around a good forge. Alright, I'll do it. But I warn ye—this won't be a simple task.'
+    )" << std::endl;
+        char choice;
+        std::cout << "This will cost you 1000 gold\n";
+        std::cout << "Do you want to proceed? (y/n)\n";
+        std::cout << "Choice: ";
+        std::cin >> choice;
+        Beep(200,100);
+        if((choice == 'y' || choice == 'Y') && player.getGold() >= 1000){
+            player.spendGold(1000);
+            std::cout << R"(
+    He motions for you to hand over the gem.
+    'Give me a moment, lad/lass. I'll heat this to the right temperature. Just don’t go wanderin' off!'
+    )" << std::endl;
+        player.equipWeapon(Item(ItemType::WEAPON, "Molto's Banger of a Hammer", 4, 10, 0));
+        questManager.completeQuest("2");
+        }
+        else{
+            std::cout << R"(
+    The blacksmith scowls, his hammer clanking hard against the anvil. 
+    'Wastin’ my time, are ye? Come back when you've grown a spine!' 
+    With a grunt, he shoves you out the door — soot, smoke, and all.
+    )" << std::endl;
+            return;
+        }
+
+        
+        
+            }
             std::cout << "\nBlacksmith: 'I can upgrade your equipment for a price.'\n";
             std::cout << "Your gold: " << player.getGold() << "\n";
             std::cout << "Your weapon: " << player.getWeapon().getName() << " " << player.getWeapon().getStatsString() << "\n";
@@ -447,6 +540,28 @@ void Game::handleNPCInteraction(NPCType type) {
             break;
         case NPCType::AHMED:
             NPC npc(NPCType::AHMED);
+            if(player.getBardBeaten() && questManager.hasQuest("1") && questManager.getStatus("1") == QuestStatus::TAKEN){
+                std::cout << R"(
+                Ahmed gives a slow, knowing nod as you return.
+
+                "So... the winds carried whispers of a humbled tune. 
+                The braggart has been bested at last?"
+
+                He closes his eyes, as if hearing a long-lost melody return to the air.  
+                "For years, my verses were drowned beneath that fool's noise. 
+                But now, the harmony is righted, the stage... at peace."
+
+                He opens one eye and smirks.  
+                "You’ve done a great service, not just for me — but for song itself."
+
+                "May this aid your journey, and may your path be ever accompanied by worthy echoes."
+                )" << "\n\n";
+                questManager.completeQuest("1");
+                std::cout << "Your luck is increased by 30!\n\n";
+                player.setLuck(30);
+                
+
+            }
             std::cout << "\nAhmed the Wise Tit: 'Ah, a traveler! I can teach you many things.'\n";
             std::cout << "1. Learn about enemies\n";
             std::cout << "2. Learn to bribe\n";
@@ -495,6 +610,15 @@ void Game::handleNPCInteraction(NPCType type) {
                     std::cout << "Your bribery skill is now " << static_cast<int>(player.getBriberySkill() * 100) << "%!\n";
                     break;
                 case 3:
+                    if(questManager.getStatus("1") == QuestStatus::NOT_TAKEN){
+                        
+                        std::cout <<"\n\n" <<R"(
+    Ahmed: 'I will teach you the song you want. But first, I have a task for you. 
+    There’s a pompous, spotlight-stealing charlatan prancing around as a bard—calls himself 'The Minstrel of Might.' 
+    He stole my songs, my stage, and my dignity. I want you to find this egomaniac and challenge him to a bardic showdown. 
+    Beat him at his own game, and I’ll make it worth your while. The tavern will sing of your glory—and I’ll finally sleep without rage in my heart.')";
+                        questManager.takeQuest("1");
+                        }
                     std::cout << "Which song would you like to hear?\n";
                     std::cout << "1. Ballad of Kirik\n";
                     std::cout << "2. Whispers of the Wyrm\n";
@@ -565,6 +689,7 @@ void Game::handleNPCInteraction(NPCType type) {
                             std::cout << "Ahmed: 'Alas, that tune is beyond my knowledge.'\n";
                             break;
                     }
+                    
                     break;
                 case 4:
                     std::cout << "Ahmed: 'Come back when you need wisdom!'\n";
@@ -836,7 +961,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 if (player.knowsEnemyType(enemy.getType())) {
                     std::cout << enemy.getName() << ": '" << enemy.getDialogue() << "'\n";
                     std::cout << "The " << enemy.getName() << " dropped their weapon and left.\n";
-                    Item drop = enemy.generateDrop();
+                    Item drop = enemy.generateDrop(player.getLuck());
                     std::cout << "\n" << enemyName << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
                     std::cout << "1. Take it (equip " << (drop.getType() == ItemType::WEAPON ? "weapon" : "armor") << ")\n";
                     std::cout << "2. Leave it (sell for " << drop.getValue() << " gold)\n";
@@ -1017,7 +1142,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             
             // Handle item drops
             if (std::rand() % 100 < 35 + player.getLuck()) { // 35% chance for item drop
-                Item drop = enemy.generateDrop();
+                Item drop = enemy.generateDrop(player.getLuck());
                 std::cout << "\n" << enemyName << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
                 std::cout << "1. Take it (equip " << (drop.getType() == ItemType::WEAPON ? "weapon" : "armor") << ")\n";
                 std::cout << "2. Leave it (sell for " << drop.getValue() << " gold)\n";
@@ -1367,15 +1492,15 @@ void Game::handleMiniBoss() {
 
         
         if (miniBossNumber == 1) {
-            // First mini-boss: 50% common, 40% rare, 10% legendary
-            relic1 = rollRelic(50-player.getLuck(), 40);
-            relic2 = rollRelic(50-player.getLuck(), 40);
-            relic3 = rollRelic(50-player.getLuck(), 40);
+            // First mini-boss: 45% common, 40% rare, 15% legendary
+            relic1 = rollRelic(45-player.getLuck(), 85);
+            relic2 = rollRelic(45-player.getLuck(), 85);
+            relic3 = rollRelic(45-player.getLuck(), 85);
         } else {
-            // Second mini-boss: 60% rare, 25% common, 15% legendary
-            relic1 = rollRelic(25-player.getLuck(), 60-player.getLuck());
-            relic2 = rollRelic(25-player.getLuck(), 60-player.getLuck());
-            relic3 = rollRelic(25-player.getLuck(), 60-player.getLuck());
+            // Second mini-boss: 70% rare, 25% common, 15% legendary
+            relic1 = rollRelic(25-player.getLuck(), 70-player.getLuck());
+            relic2 = rollRelic(25-player.getLuck(), 70-player.getLuck());
+            relic3 = rollRelic(25-player.getLuck(), 70-player.getLuck());
         }
         
         std::cout << "\nThe mini-boss drops three relics! Choose one:\n";

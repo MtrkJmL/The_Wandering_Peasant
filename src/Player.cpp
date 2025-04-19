@@ -151,12 +151,33 @@ void Player::setMaxStamina(int amount) {
     stamina = maxStamina;
 }
 
+void Player::setMaxHealth(int amount) {
+    maxHealth += amount;
+    health = maxHealth;
+}
+
 int Player::getLuck() const {
     return luck;
 }
 
 void Player::setLuck(int amount) {
     luck += amount;
+}
+
+void Player::setBardBeaten(bool beaten) {
+    bardBeaten = beaten;
+}
+
+bool Player::getBardBeaten() const {
+    return bardBeaten;
+}
+
+void Player::setMoltoTalked(bool talked) {
+    moltoTalked = talked;
+}
+
+bool Player::getMoltoTalked() const {
+    return moltoTalked;
 }
 
 void Player::levelUp() {
@@ -169,9 +190,9 @@ void Player::levelUp() {
     maxStamina += 1;
     stamina = maxStamina;
     
-    std::cout << "\nLevel Up! You are now level " << level << "!\n";
-    std::cout << "Health increased to " << maxHealth << "!\n";
-    std::cout << "Stamina increased to " << maxStamina << "!\n";
+    std::cout << "\n\n⬆️ Level Up! You are now level " << level << "!\n";
+    std::cout << "💙 Health increased to " << maxHealth << "!\n";
+    std::cout << "⚡️ Stamina increased to " << maxStamina << "!\n\n";
 }
 
 void Player::equipWeapon(const Item& newWeapon) {

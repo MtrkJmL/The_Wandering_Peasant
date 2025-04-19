@@ -29,6 +29,8 @@ private:
     bool blessingUsed = false;
     int attackCount; // For tracking attack count for relics
     bool isFirstAttack; // For Battle Horn relic
+    bool bardBeaten = false;
+    bool moltoTalked = false;
 
     void levelUp();
 
@@ -58,6 +60,7 @@ public:
     int getLuck() const;
     void setLuck(int amount);
     void setMaxStamina(int amount);
+    void setMaxHealth(int amount);
     bool hasUsedBlessing() const;
     void useBlessing();
     void resetBlessingUsed();
@@ -102,7 +105,10 @@ public:
     void improveBriberySkill();
     void learnEnemyType(EnemyType type);
     void learnBardSong(BardSong song);
-    
+    void setBardBeaten(bool beaten);
+    bool getBardBeaten() const;
+    void setMoltoTalked(bool talked);
+    bool getMoltoTalked() const;
     // Timing-based attack methods
     float getTimingMultiplier(int cursorPosition, int totalPositions) const;
     int timingBasedAttack(int cursorPosition, int totalPositions, bool isHeavyAttack, bool& isCrit);

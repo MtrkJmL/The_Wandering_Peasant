@@ -8,6 +8,7 @@ std::string Item::getRarityName(ItemRarity rarity) {
     switch (rarity) {
         case ItemRarity::COMMON: return "Common";
         case ItemRarity::RARE: return "Rare";
+        case ItemRarity::EPIC: return "Epic";
         case ItemRarity::LEGENDARY: return "Legendary";
         default: return "Unknown";
     }
@@ -59,15 +60,23 @@ void Item::generateStatsForRarity(ItemRarity rarity, int& diceCount, int& diceSi
             break;
         }
         case ItemRarity::RARE: {
-            std::uniform_int_distribution<> diceDis(2, 4);
+            std::uniform_int_distribution<> diceDis(2, 3);
             std::uniform_int_distribution<> modDis(-1, 2);
             diceCount = diceDis(gen);
             diceSides = 6;
             modifier = modDis(gen);
             break;
         }
+        case ItemRarity::EPIC: {
+            std::uniform_int_distribution<> diceDis(3, 4);
+            std::uniform_int_distribution<> modDis(-2, 3);
+            diceCount = diceDis(gen);
+            diceSides = 6;
+            modifier = modDis(gen);
+            break;
+        }
         case ItemRarity::LEGENDARY: {
-            std::uniform_int_distribution<> diceDis(4, 7);
+            std::uniform_int_distribution<> diceDis(5, 7);
             std::uniform_int_distribution<> modDis(2, 5);
             diceCount = diceDis(gen);
             diceSides = 6;
@@ -170,7 +179,7 @@ Item Item::generateRandomItem() {
     ItemType type = static_cast<ItemType>(typeDis(gen));
     
     // Randomly choose rarity
-    std::uniform_int_distribution<> rarityDis(0, 2);
+    std::uniform_int_distribution<> rarityDis(0, 3);
     ItemRarity rarity = static_cast<ItemRarity>(rarityDis(gen));
     
     return Item(type, rarity);

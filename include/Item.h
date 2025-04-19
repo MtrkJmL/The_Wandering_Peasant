@@ -11,6 +11,7 @@ enum class ItemType {
 enum class ItemRarity {
     COMMON,
     RARE,
+    EPIC,
     LEGENDARY
 };
 enum class StatusEffect {

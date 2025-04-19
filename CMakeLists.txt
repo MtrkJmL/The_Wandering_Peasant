@@ -15,6 +15,8 @@ add_executable(wandering_peasant
     src/Terrain.cpp
     src/Blessing.cpp
     src/Village.cpp
+    src/Quest.cpp
+    src/QuestManager.cpp
 )
 
 target_include_directories(wandering_peasant PRIVATE include) 

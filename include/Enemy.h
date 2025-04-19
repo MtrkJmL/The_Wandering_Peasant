@@ -50,7 +50,7 @@ public:
     int rollAttack() const;
     int rollDefense() const;
     
-    Item generateDrop() const;
+    Item generateDrop(int luck) const;
 
     void applyBleeding();
     bool isBleeding() const;

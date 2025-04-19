@@ -61,4 +61,6 @@ public:
     // Ahmed's special methods
     void teachAboutEnemy(EnemyType type);
     void teachBribery();
+
+    
 }; 

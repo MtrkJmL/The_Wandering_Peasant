@@ -59,6 +59,53 @@ void Village::displayMenu(Player& player) {
 }
 
 void Village::visitBlacksmith(Player& player) {
+    if(Game::questManager.hasQuest("2") && Game::questManager.getStatus("2") == QuestStatus::TAKEN && !player.getMoltoTalked()){
+            std::cout << R"(
+    --- Molto Anvilgrin, the Eternal Banger ---
+    Molto looks at the gem with a slight frown, his darkblood eyes glowing faintly. 
+    'Ah, young one... I must confess, this task is beyond me. Darkbloods like myself cannot forge such gems. 
+    It is... a *curse*, I suppose. But fear not, for I will guide you.'"
+    )" << std::endl;
+
+            std::cout << R"(
+    Molto leans in closer, his voice lowering to a conspiratorial whisper.
+    'Find a human blacksmith. One of those stout, sweaty fellows—always drenched in soot, 
+    with an apron of humility and a belly full of ale. Tell them...' 
+    )" << std::endl;
+
+            std::cout << R"(
+    'Molto Anvilgrin says you must forge this!'"
+    )" << std::endl;
+
+            std::cout << R"(
+    Molto holds up a finger, cautioning you.
+    'Now listen carefully. The blacksmith will likely try to dip it in molten metal—do not allow this!'
+    His voice becomes more urgent.
+    'No metal! No! What it needs... is molten lava. Hotter than any forge you’ve ever seen!'"
+    )" << std::endl;
+
+            std::cout << R"(
+    Molto gives a sly grin and winks.
+    'When they raise the hammer... you must stop them. No hammer! Tell them it must be shaped by hand. 
+    Only then will the gem be ready.'"
+    )" << std::endl;
+
+            std::cout << R"(
+    He leans back, tapping his foot with satisfaction.
+    'Finally, give them five gold, but take back one... for pride’s sake. Too much gold, and they’ll lose their humility.'"
+    )" << std::endl;
+
+            std::cout << R"(
+    Molto pauses, grinning.
+    'And if the gem explodes, well... you’ll know you’ve done it right!'"
+    )" << std::endl;
+
+            std::cout << R"(
+    With that, Molto turns to his forge, his hammer raised, ready to return to his eternal crafting.
+    'Now go, young adventurer. May the fire of creation be with you.'"
+    )" << std::endl;
+        player.setMoltoTalked(true);
+        }
     std::cout << "Gold: " << player.getGold() << std::endl;
     std::cout << "\n\n--- Molto Anvilgrin, the Eternal Banger ---" << std::endl;
     std::cout << "1. Upgrade Weapon(" << 300/player.getBriberySkill() << " gold)" << std::endl;
@@ -92,12 +139,13 @@ void Village::visitShrine(Player& player) {
 
     std::cout << R"(
     🛐 You enter the ancient shrine, lit dimly by divine glow...
-    Four statues stand tall, each representing a forgotten champion.
+    Three statues stand tall, each representing a forgotten champion of Zmar.
     
-    Choose a champion to receive their blessing:
-    1. Kirik – Master of afflictions
-    2. Berxes – Brute force incarnate
-    3. Stadin – The eternal stillness
+    Choose a champion to receive their blessing in exchange for a sacrifice:
+    1. Kirik – Master of afflictions (max Stamina -4)
+    2. Berxes – Brute force incarnate (max HP -40)
+    3. Stadin – The eternal stillness (max HP -25 , max Stamina -2)
+    4. Leave shrine
     )";
     std::cout << "Choice: ";
     int choice;
@@ -106,17 +154,30 @@ void Village::visitShrine(Player& player) {
 
     switch (choice) {
         case 1:
+            player.setMaxStamina(-4);
             blessings.push_back(Blessing::generateKirikBlessing());
-            blessings.push_back(Blessing::generateKirikBlessing());
+            do {
+                blessings.push_back(Blessing::generateKirikBlessing());
+            } while (blessings[1].getName() == blessings[0].getName());
             break;
         case 2:
+            player.setMaxHealth(-40);
             blessings.push_back(Blessing::generateBerxesBlessing());
-            blessings.push_back(Blessing::generateBerxesBlessing());
+            do {
+                blessings.push_back(Blessing::generateBerxesBlessing());
+            } while (blessings[1].getName() == blessings[0].getName());
             break;
         case 3:
+            player.setMaxHealth(-25);
+            player.setMaxStamina(-2);
             blessings.push_back(Blessing::generateStadinBlessing());
-            blessings.push_back(Blessing::generateStadinBlessing());
+            do {
+                blessings.push_back(Blessing::generateStadinBlessing());
+            } while (blessings[1].getName() == blessings[0].getName());
             break;
+        case 4:
+            std::cout << "You leave the shrine.\n";
+            return;
         default:
             std::cout << "You hesitated... and the moment passed.\n";
             return;
@@ -410,6 +471,7 @@ void Village::challengeBard(Player& player) {
         std::cout << "\n\"Ah, a connoisseur!\" the bard exclaims as you perfectly recount the melody.\n";
         std::cout << "\"You win the bet! Here's your prize.\"\n";
         player.addGold(bet);
+        player.setBardBeaten(true);
         std::cout << "You gained " << bet << " gold.\n";
     } else {
         std::cout << "\nYou hum a few bars, but falter... The tune escapes you.\n";
