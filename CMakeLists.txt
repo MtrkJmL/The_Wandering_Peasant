@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-project(RPG_Game)
+project(Wandering_Peasant)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(rpg_game 
+add_executable(wandering_peasant 
     src/main.cpp
     src/Player.cpp
     src/Enemy.cpp
@@ -17,4 +17,4 @@ add_executable(rpg_game
     src/Village.cpp
 )
 
-target_include_directories(rpg_game PRIVATE include) 
+target_include_directories(wandering_peasant PRIVATE include) 
