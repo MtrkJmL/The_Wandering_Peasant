@@ -514,42 +514,52 @@ void Game::handleNPCInteraction(NPCType type) {
                         case 1:
                             std::cout << "Ahmed sings the Ballad of Kirik:\n";
                             std::cout << npc.getBardSongVerse(BardSong::BALLAD_OF_KIRIK) << "\n";
+                            player.learnBardSong(BardSong::BALLAD_OF_KIRIK);
                             break;
                         case 2:
                             std::cout << "Ahmed sings the Whispers of the Wyrm:\n";
                             std::cout << npc.getBardSongVerse(BardSong::WHISPERS_OF_THE_WYRM) << "\n";
+                            player.learnBardSong(BardSong::WHISPERS_OF_THE_WYRM);
                             break;
                         case 3:
                             std::cout << "Ahmed sings the Eclipsefire Lament:\n";
                             std::cout << npc.getBardSongVerse(BardSong::ECLIPSEFIRE_LAMENT) << "\n";
+                            player.learnBardSong(BardSong::ECLIPSEFIRE_LAMENT);
                             break;
                         case 4:
                             std::cout << "Ahmed sings the March of the Lost Crowns:\n";     
                             std::cout << npc.getBardSongVerse(BardSong::MARCH_OF_THE_LOST_CROWNS) << "\n";
+                            player.learnBardSong(BardSong::MARCH_OF_THE_LOST_CROWNS);
                             break;
                         case 5:
                             std::cout << "Ahmed sings the Dirge of the Darkbloods:\n";
                             std::cout << npc.getBardSongVerse(BardSong::DIRGE_OF_THE_DARKBLOODS) << "\n";
+                            player.learnBardSong(BardSong::DIRGE_OF_THE_DARKBLOODS);
                             break;
                         case 6:
                             std::cout << "Ahmed sings the Hymns from the Hollow:\n";
-                            std::cout << npc.getBardSongVerse(BardSong::HYMNS_FROM_THE_HOLLOW) << "\n";
+                            std::cout << npc.getBardSongVerse(BardSong::HYMNS_FROM_THE_HOLLOW) << "\n"; 
+                            player.learnBardSong(BardSong::HYMNS_FROM_THE_HOLLOW);
                             break;
                         case 7:
                             std::cout << "Ahmed sings the Tavern Tune of Glory:\n";         
                             std::cout << npc.getBardSongVerse(BardSong::TAVERN_TUNE_OF_GLORY) << "\n";              
+                            player.learnBardSong(BardSong::TAVERN_TUNE_OF_GLORY);
                             break;
                         case 8:
                             std::cout << "Ahmed sings the Ode to the Last Flame:\n";
                             std::cout << npc.getBardSongVerse(BardSong::ODE_TO_THE_LAST_FLAME) << "\n";
+                            player.learnBardSong(BardSong::ODE_TO_THE_LAST_FLAME);
                             break;
                         case 9:
                             std::cout << "Ahmed sings the Dance of the Starbound:\n";
                             std::cout << npc.getBardSongVerse(BardSong::DANCE_OF_THE_STARBOUND) << "\n";
+                            player.learnBardSong(BardSong::DANCE_OF_THE_STARBOUND);
                             break;
                         case 10:
                             std::cout << "Ahmed sings the Chant of the Moonwatchers:\n";
                             std::cout << npc.getBardSongVerse(BardSong::CHANT_OF_THE_MOONWATCHERS) << "\n";
+                            player.learnBardSong(BardSong::CHANT_OF_THE_MOONWATCHERS);
                             break;
                         default:
                             std::cout << "Ahmed: 'Alas, that tune is beyond my knowledge.'\n";
@@ -716,7 +726,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     }
                     
                     // Sleep for animation
-                    std::this_thread::sleep_for(std::chrono::milliseconds(25/enemy.getLevel()));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(40/enemy.getLevel()));
                 }
                 Beep(150,200);
                 // Restore terminal settings
@@ -752,11 +762,13 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                         player.takeDamage(20);
                         std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
                         player.useBlessing();
+                        berxesActive = false;
                     }
                     if(berxesActive && player.getEquippedBlessing().getName() == "Crushing Momentum"){
                         player.heal(damage);
                         std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
                         player.useBlessing();
+                        berxesActive = false;
                     }
                     enemy.takeDamage(damage);
                     std::cout << "\nYou strike with your " << player.getWeapon().getName() << "!\n";
@@ -1250,19 +1262,19 @@ void Game::handleMarket() {
     int rerollCost = 100;
     bool inMarket = true;
 
-    Item weapon = Item::generateRandomItem();
-    Item armor = Item::generateRandomItem();
+    Item item1 = Item::generateRandomItem();
+    Item item2 = Item::generateRandomItem();
 
     while (inMarket) {
         std::cout << "\nYou find a bustling market!\n";
         std::cout << "Your current gold: " << player.getGold() << "\n";
 
         std::cout << "\nItems for sale:\n";
-        std::cout << "1. " << weapon.getName() << " " << weapon.getStatsString()
-                  << " (Cost: " << static_cast<int>(weapon.getValue() / player.getBriberySkill()) << " gold, discount: "
+        std::cout << "1. " << item1.getName() << " " << item1.getStatsString()
+                  << " (Cost: " << static_cast<int>(item1.getValue() / player.getBriberySkill()) << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
-        std::cout << "2. " << armor.getName() << " " << armor.getStatsString()
-                  << " (Cost: " << static_cast<int>(armor.getValue() / player.getBriberySkill()) << " gold, discount: "
+        std::cout << "2. " << item2.getName() << " " << item2.getStatsString()
+                  << " (Cost: " << static_cast<int>(item2.getValue() / player.getBriberySkill()) << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
         std::cout << "3. Reroll stocks (Cost: " << rerollCost << " gold)\n";
         std::cout << "4. Leave market\n";
@@ -1274,20 +1286,28 @@ void Game::handleMarket() {
 
         switch (choice) {
             case 1: {
-                int price = weapon.getValue() / player.getBriberySkill();
+                int price = item1.getValue() / player.getBriberySkill();
                 if (player.spendGold(price)) {
-                    player.equipWeapon(weapon);
-                    std::cout << "You purchase and equip the " << weapon.getName() << "!\n";
+                    if (item1.getType() == ItemType::WEAPON) {
+                        player.equipWeapon(item1);
+                    } else if (item1.getType() == ItemType::ARMOR) {
+                        player.equipArmor(item1);
+                    }
+                    std::cout << "You purchase and equip the " << item1.getName() << "!\n";
                 } else {
                     std::cout << "You don't have enough gold! (Need " << price << ")\n";
                 }
                 break;
             }
             case 2: {
-                int price = armor.getValue() / player.getBriberySkill();
+                int price = item2.getValue() / player.getBriberySkill();
                 if (player.spendGold(price)) {
-                    player.equipArmor(armor);
-                    std::cout << "You purchase and equip the " << armor.getName() << "!\n";
+                    if (item2.getType() == ItemType::WEAPON) {
+                        player.equipWeapon(item2);
+                    } else if (item2.getType() == ItemType::ARMOR) {
+                        player.equipArmor(item2);
+                    }
+                    std::cout << "You purchase and equip the " << item2.getName() << "!\n";
                 } else {
                     std::cout << "You don't have enough gold! (Need " << price << ")\n";
                 }
@@ -1296,8 +1316,8 @@ void Game::handleMarket() {
             case 3:
                 if (player.getGold() >= rerollCost) {
                     player.spendGold(rerollCost);
-                    weapon = Item::generateRandomItem();
-                    armor = Item::generateRandomItem();
+                    item1 = Item::generateRandomItem();
+                    item2 = Item::generateRandomItem();
                     std::cout << "You pay " << rerollCost << " gold and the merchant shows new items.\n";
                     rerollCost +=100;
                 } else {

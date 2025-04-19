@@ -70,11 +70,11 @@ void Village::visitBlacksmith(Player& player) {
     switch (choice) {
         case 1:
             player.getWeapon().addModifier(2);
-            player.spendGold(100/player.getLevel());
+            player.spendGold(300/player.getBriberySkill());
             break;
         case 2:
             player.getArmor().addModifier(2);
-            player.spendGold(100/player.getLevel());
+            player.spendGold(300/player.getBriberySkill());
             break;
         case 3:
             return;
@@ -152,19 +152,19 @@ void Village::visitMarket(Player& player) {
     int rerollCost = 100;
     bool inMarket = true;
 
-    Item weapon = Item::generateRandomItem();
-    Item armor = Item::generateRandomItem();
+    Item item1 = Item::generateRandomItem();
+    Item item2 = Item::generateRandomItem();
 
     while (inMarket) {
         std::cout << "\nYou find a bustling market!\n";
         std::cout << "Your current gold: " << player.getGold() << "\n";
 
         std::cout << "\nItems for sale:\n";
-        std::cout << "1. " << weapon.getName() << " " << weapon.getStatsString()
-                  << " (Cost: " << weapon.getValue() / player.getBriberySkill() << " gold, discount: "
+        std::cout << "1. " << item1.getName() << " " << item1.getStatsString()
+                  << " (Cost: " << item1.getValue() / player.getBriberySkill() << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
-        std::cout << "2. " << armor.getName() << " " << armor.getStatsString()
-                  << " (Cost: " << armor.getValue() / player.getBriberySkill() << " gold, discount: "
+        std::cout << "2. " << item2.getName() << " " << item2.getStatsString()
+                  << " (Cost: " << item2.getValue() / player.getBriberySkill() << " gold, discount: "
                   << static_cast<int>((player.getBriberySkill() - 1.0f) * 100) << "%)\n";
         std::cout << "3. Reroll stocks (Cost: " << rerollCost << " gold)\n";
         std::cout << "4. Leave market\n";
@@ -176,20 +176,28 @@ void Village::visitMarket(Player& player) {
 
         switch (choice) {
             case 1: {
-                int price = weapon.getValue() / player.getBriberySkill();
+                int price = item1.getValue() / player.getBriberySkill();
                 if (player.spendGold(price)) {
-                    player.equipWeapon(weapon);
-                    std::cout << "You purchase and equip the " << weapon.getName() << "!\n";
+                    if (item1.getType() == ItemType::WEAPON) {
+                        player.equipWeapon(item1);
+                    } else if (item1.getType() == ItemType::ARMOR) {
+                        player.equipArmor(item1);
+                    }
+                    std::cout << "You purchase and equip the " << item1.getName() << "!\n";
                 } else {
                     std::cout << "You don't have enough gold!\n";
                 }
                 break;
             }
             case 2: {
-                int price = armor.getValue() / player.getBriberySkill();
+                int price = item2.getValue() / player.getBriberySkill();
                 if (player.spendGold(price)) {
-                    player.equipArmor(armor);
-                    std::cout << "You purchase and equip the " << armor.getName() << "!\n";
+                    if (item2.getType() == ItemType::WEAPON) {
+                        player.equipWeapon(item2);
+                    } else if (item2.getType() == ItemType::ARMOR) {
+                        player.equipArmor(item2);
+                    }
+                    std::cout << "You purchase and equip the " << item2.getName() << "!\n";
                 } else {
                     std::cout << "You don't have enough gold!\n";
                 }
@@ -198,8 +206,8 @@ void Village::visitMarket(Player& player) {
             case 3:
                 if (player.getGold() >= rerollCost) {
                     player.spendGold(rerollCost);
-                    weapon = Item::generateRandomItem();
-                    armor = Item::generateRandomItem();
+                    item1 = Item::generateRandomItem();
+                    item2 = Item::generateRandomItem();
                     std::cout << "You pay " << rerollCost << " gold and the merchant shows new items.\n";
                     rerollCost +=100;
                 } else {

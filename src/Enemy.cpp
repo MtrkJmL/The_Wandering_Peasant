@@ -111,26 +111,26 @@ Item Enemy::generateDrop() const {
     int mod = 0;
     switch (enemyType) {
         case EnemyType::DRAGON:
-            mod = 30;            
+            mod = 10;            
             break;
         case EnemyType::BANDIT:
-            mod = 15;
+            mod = 5;
             break;
         case EnemyType::SKELETON:
-            mod = 15;
+            mod = 4;
             break;
         case EnemyType::TROLL:
-            mod = 20;
+            mod = 7;
             break;
         case EnemyType::ORC:
-            mod = 10;
+            mod = 3;
             break;
         default:
             break;
     }   
-    if (roll < 60-mod) {
+    if (roll < 60-mod*level) {
         rarity = ItemRarity::COMMON;
-    } else if (roll < 85) {
+    } else if (roll < 85-mod*level) {
         rarity = ItemRarity::RARE;
     } else {
         rarity = ItemRarity::LEGENDARY;
