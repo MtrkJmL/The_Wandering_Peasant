@@ -31,6 +31,12 @@
     <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Village.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\Quest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Mustafa\Desktop\cpp-rpg\src\QuestManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Mustafa\Desktop\cpp-rpg\CMakeLists.txt" />
