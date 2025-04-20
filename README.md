@@ -16,7 +16,7 @@ This is peasant-core adventuring at its finest.
 
 ## 🆕 What's New in Ver. 1.03 – *Questpocalypse in Peasaterra* ✨
 
-- 📜 **Side Quests** — Finally, somewhere that *might* not try to kill you.
+- 📜 **Side Quests** — More things to do while wandering in Peasaterra.
 - ⚔️ **Unique Weapons** — Powerful gear with backstories.
 - 🧙 **New NPCs** — Meet strangers and discover more lore.
 - 🎲 **Balancing** — From weapons to Blessings, enemies to Relics, everything has been revisited.
