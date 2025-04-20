@@ -111,7 +111,7 @@ Item::Item(ItemType type, ItemRarity rarity)
         generateStatsForRarity(rarity, diceCount, diceSides, modifier);
         
         // Calculate value based on stats
-        value = (diceCount * diceSides + modifier) * 10;
+        value = (diceCount * diceSides + modifier) * 15;
     } else { // ARMOR
         // Randomly select an armor type
         std::uniform_int_distribution<> armorDis(0, 4);
@@ -122,7 +122,7 @@ Item::Item(ItemType type, ItemRarity rarity)
         generateStatsForRarity(rarity, diceCount, diceSides, modifier);
         
         // Calculate value based on stats
-        value = (diceCount * diceSides + modifier) * 8;
+        value = (diceCount * diceSides + modifier) * 12;
     }
 }
 

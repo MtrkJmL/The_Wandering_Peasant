@@ -32,11 +32,11 @@ private:
     bool bardBeaten = false;
     bool moltoTalked = false;
 
-    void levelUp();
+    
 
 public:
     Player(const std::string& playerName);
-    
+    void levelUp();
     // Basic stats
     std::string getName() const;
     int getLevel() const;

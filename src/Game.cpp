@@ -108,7 +108,7 @@ void Game::startNewGame() {
     
     questManager.addQuest(Quest("1", "Bitter Ballads", "Ahmed seeks vengeance on his rival who stole his song and his spotlight — put an end to the egomaniac’s tune once and for all."));
     questManager.addQuest(Quest("2", "Banger of a Stone", "You’ve found a glowing stone with a note reading: 'Molto, here’s something for you to bang.' It’s time to find Molto and see what he can forge from this strange stone—who knows what chaos he’ll create."));
-    
+    questManager.addQuest(Quest("3", "He Who Stole My Boots", "An old, tattered advert nailed to a tree by the roadside, announcing that a man is urgently seeking a pair of boots. Description matches your Traveler's Boots. The reward for returning them may be far more than you bargained for."));
     std::string playerName;
     std::cout << "\nYour peasant is called: ";
     std::cin >> playerName;
@@ -117,8 +117,14 @@ void Game::startNewGame() {
     std::cout << playerName << " had a wonderful childhood.\n";
     std::cout << "\nWhen it came to hide-and-seek, none could match him. Some said it was skill, others... something more. He always triumphed, for he was:\n\n";
     std::cout << "1. ⚡ Fleet of Foot — “The wind itself envied his stride.” (+3 max stamina)\n";
-    std::cout << "2. 🍀 Blessed by Lady Luck — “Dice rolled kindly, doors creaked just right, and shadows always favored him.” (+10 luck)\n";
-    std::cout << "3. 🕳️ Cursed with Misfortune — “Ah, my mistake. This little one was a loser. Every twig snapped, every sneeze betrayed him. Even the trees seemed to point him out.” (-10 luck)\n";
+    std::cout << "2. 🍀 Blessed by Lady Luck — “Dice rolled kindly, doors creaked just right, and shadows always favored him.” (+5 luck)\n";
+    std::cout << "3. 💰 Rich as Croesus — “The gold coins clinked like a symphony of fortune.” (+250 gold)\n";
+    std::cout << "4. 🤝 Ally of the Underclans — “His goblin friends were always looking out for him.” (Knows goblins)\n";
+    std::cout << "5. 🪙 Silver Tongue — “With a wink, a coin, and a few carefully chosen words, he could sway even the most hardened heart. The art of persuasion was his to command.” (+2 level bribery skill)\n";
+    std::cout << "6. ⚔️ Forged in Fire — “Before his first breath of adventure, he was given a blade that gleamed with the fire of a blacksmith’s craft and armor strong enough to turn aside a dragon’s breath.” (Better Starting Weapon and Armor)\n";
+    std::cout << "7. 🏃‍♂️ One Step Ahead — “While others began their journey, he was already in motion, far beyond where they’d started. His early steps paved the way for greatness.” (Starts at Level 2)\n";
+    std::cout << "8. 🏺 Relic of the Past — “A powerful relic rests in his hands, an heirloom of forgotten times, radiating mysterious energy. But alas, his armor is but humble peasant clothes, offering little protection.” (Starts with a rare relic, but only with peasant clothes)\n";
+    std::cout << "9. 🕳️ Cursed with Misfortune — “Ah, my mistake. This little one was a loser. Every twig snapped, every sneeze betrayed him. Even the trees seemed to point him out.” (-10 luck)\n";
     std::cout << "Choose your past:";
     int past;
     std::cin >> past;
@@ -126,8 +132,24 @@ void Game::startNewGame() {
     if (past == 1) {
         player.setMaxStamina(3);
     } else if (past == 2) {
-        player.setLuck(10);
-    } else {
+        player.setLuck(5);
+    } else if (past == 3) {
+        player.addGold(250);
+    } else if (past == 4) {
+        player.learnEnemyType(EnemyType::GOBLIN);
+    } else if (past == 5) {
+        player.improveBriberySkill();
+        player.improveBriberySkill();
+    } else if (past == 6) {
+        player.equipWeapon(Item(ItemType::WEAPON, "Less Rusty Sword", 1, 6, 4));
+        player.equipArmor(Item(ItemType::ARMOR, "Chainmail", 1, 6, 2));
+    } else if (past == 7) { 
+        player.levelUp();
+        player.addExperience(100);
+    } else if (past == 8) {
+        player.equipRelic(Relic::generateRareRelic());
+        player.equipArmor(Item(ItemType::ARMOR, "Peasant Clothes", 1, 1, 1));
+    } else if (past == 9) {
         player.setLuck(-10);
     }
     // Offer starting relic selection
@@ -139,6 +161,7 @@ void Game::startNewGame() {
     std::cout << "1. " << relic1.getName() << " - " << relic1.getDescription() << "\n";
     std::cout << "2. " << relic2.getName() << " - " << relic2.getDescription() << "\n";
     std::cout << "3. " << relic3.getName() << " - " << relic3.getDescription() << "\n";
+    std::cout << "4. Don't choose any\n";
     std::cout << "Choice: ";
     
     int choice;
@@ -149,7 +172,7 @@ void Game::startNewGame() {
         case 2: player.equipRelic(relic2); break;
         case 3: player.equipRelic(relic3); break;
         default:
-            std::cout << "Invalid choice! As a punishment, you start with no relic.\n";
+            std::cout << "You decided to start with no relic or with whatever you already have from your past\n";
             break;
     }
     
@@ -266,6 +289,23 @@ void Game::handleWandering() {
 
 void Game::handleBranchingPath() {
     std::cout << "\nYou come to a fork in the road.\n";
+    if(questManager.hasQuest("3") && questManager.getStatus("3") == QuestStatus::NOT_TAKEN && player.getEquippedRelic().getName() == "[🔵]Traveler's Mighty Boots"){
+        std::cout << R"(
+As you traverse the winding road, the sun beginning its slow descent behind the distant hills, something catches your eye. Tacked to a nearby tree is a hastily scrawled notice, fluttering slightly in the breeze. The ink is smeared in places, but the message is clear:
+
+"LOST BOOTS — Reward Offered!"
+
+A crude drawing of a boot accompanies the note, with the following written beneath:
+
+_"A man of great discretion seeks a pair of sturdy boots to replace his. If you have any such footwear, please consider a trade. A substantial reward awaits those who aid in this quest."_
+
+The note ends with an odd symbol, one that seems familiar yet distant, a mark of a clan you have yet to place.
+
+
+)" << std::endl;
+        questManager.takeQuest("3");
+
+    }
     
     // Generate left path encounter
     Terrain leftTerrain = Terrain::generateRandomTerrain();
@@ -364,7 +404,7 @@ void Game::handleBranchingPath() {
             handleMarket();
         } else {
             int chestRoll = std::rand() % 100;
-            if (chestRoll < 10) {
+            if (chestRoll < 50) {
                 int goldAmount = (std::rand() % 50 + 10) * player.getLevel();
                 std::cout << "\nYou found " << goldAmount << " gold in the treasure chest!\n";
                 player.addGold(goldAmount);
@@ -383,7 +423,7 @@ void Game::handleBranchingPath() {
                         questManager.takeQuest("2");
                     }
                 else{
-                    int goldAmount = (std::rand() % 50 + 10) * player.getLevel() * 2;
+                    int goldAmount = (std::rand() % 50 + 10) * player.getLevel() * 1.3;
                     std::cout << "\nYou are in luck! You found " << goldAmount << " gold in the treasure chest!\n";
                     player.addGold(goldAmount);
 
@@ -436,6 +476,8 @@ void Game::handleNPCInteraction(NPCType type) {
     )" << std::endl;
         player.equipWeapon(Item(ItemType::WEAPON, "Molto's Banger of a Hammer", 4, 10, 0));
         questManager.completeQuest("2");
+        std::cout << "\nYou gained 250 experience.\n" << std::endl;
+        player.addExperience(250);
         }
         else{
             std::cout << R"(
@@ -559,7 +601,8 @@ void Game::handleNPCInteraction(NPCType type) {
                 questManager.completeQuest("1");
                 std::cout << "Your luck is increased by 30!\n\n";
                 player.setLuck(30);
-                
+                std::cout << "\nYou gained 120 experience.\n" << std::endl;
+                player.addExperience(120);
 
             }
             std::cout << "\nAhmed the Wise Tit: 'Ah, a traveler! I can teach you many things.'\n";
@@ -884,7 +927,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 if (damage > 0) {
                     if(berxesActive && player.getEquippedBlessing().getName() == "Titan's Wrath"){
                         damage *= 3;
-                        player.takeDamage(20);
+                        player.takeDamage(35);
                         std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
                         player.useBlessing();
                         berxesActive = false;
@@ -1189,7 +1232,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 }
 
 void Game::handleFinalBoss() {
-    Enemy finalBoss("Dragon King", 12, EnemyType::DRAGON); // Level 12 boss
+    Enemy finalBoss("Dragon King", 15, EnemyType::DRAGON); // Level 15 boss
     std::cout << R"(
 ╔══════════════════════════════════════════════════════════════╗
 ║                       🔥 TWO TITANS MEET 🔥                  ║
@@ -1497,10 +1540,10 @@ void Game::handleMiniBoss() {
             relic2 = rollRelic(45-player.getLuck(), 85);
             relic3 = rollRelic(45-player.getLuck(), 85);
         } else {
-            // Second mini-boss: 70% rare, 25% common, 15% legendary
-            relic1 = rollRelic(25-player.getLuck(), 70-player.getLuck());
-            relic2 = rollRelic(25-player.getLuck(), 70-player.getLuck());
-            relic3 = rollRelic(25-player.getLuck(), 70-player.getLuck());
+            // Second mini-boss: 50% rare, 25% common, 25% legendary
+            relic1 = rollRelic(25-player.getLuck(), 75-player.getLuck());
+            relic2 = rollRelic(25-player.getLuck(), 75-player.getLuck());
+            relic3 = rollRelic(25-player.getLuck(), 75-player.getLuck());
         }
         
         std::cout << "\nThe mini-boss drops three relics! Choose one:\n";

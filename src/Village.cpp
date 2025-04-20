@@ -485,6 +485,60 @@ void Village::challengeBard(Player& player) {
 }
 
 void Village::talkToNPCs(Player& player) {
+    if(player.getEquippedRelic().getName() == "[🔵]Traveler's Mighty Boots" && Game::questManager.hasQuest("3") && Game::questManager.getStatus("3") == QuestStatus::TAKEN){
+        std::cout << R"(
+        A man with a scar on his face looks you up and down, noticing your boots. He sneers and spits on the floor.
+        "Nice boots, peasant!" he laughs mockingly. "You think those will save you in this harsh world? 
+        I’ve seen men with better boots, and none of ‘em were alive by sunset!"
+        
+        He leans in closer, his voice dropping to a serious tone.
+        "I’ll make you a deal. You give me that boots of yours, and I'll trade you something far more valuable—a weapon once owned by a champion of Zmar. 
+        Also, a relic to protect you from the dangers of the world. You game for that?"
+        )" << std::endl;
+
+        std::cout << "Do you agree to the trade? (y/n): ";
+        char choice;
+        std::cin >> choice;
+        Beep(200, 100);
+
+        if (choice == 'y' || choice == 'Y') {
+            player.equipRelic(Relic::generateCommonRelic());
+            std::cout << "\nYou agree to the trade. The patron hands you " << player.getEquippedRelic().getName() << " and Stadin's Trident" << std::endl;
+            
+            player.equipWeapon(Item(ItemType::WEAPON, "Stadin's Trident", 20, 2, -10));
+        }
+        else{
+            std::cout << R"(
+            The patron scowls, his grin fading into a look of disdain. "Pity. You could have had something powerful. 
+            But no matter. Keep your trinkets, peasant. You'll regret this."
+            )" << std::endl;
+
+            std::cout << R"(
+            As you turn to leave, a strange, unsettling feeling washes over you. 
+            You glance back just in time to see the patron unfurl a banner emblazoned with the symbol of Stadin's Clan.
+            
+            "Wait," you whisper to yourself. "That... that's Stadin's banner!"
+            )" << std::endl;
+
+            std::cout << R"(
+            But before you can act, something swift and sharp brushes by your feet. 
+            You glance down in confusion and find your Traveler's Boots—gone. 
+
+            You look up to see the mysterious figure disappearing into the shadows, the banner of Stadin's Clan fluttering behind him.
+
+            Damn. Not only have you lost your boots, but you’ve likely made an enemy of a clan more dangerous than you imagined.
+            )" << std::endl;
+            std::cout << R"(
+            However, the patron tosses something small at your feet with a twisted smile.
+            "Here, take this with you, peasant. A little something for the road."
+            )" << std::endl;
+            player.equipRelic(Relic::generateCommonRelic());
+            std::cout << "\nYou equip " << player.getEquippedRelic().getName() << std::endl;
+        }
+        Game::questManager.completeQuest("3");
+        player.addExperience(60);
+        std::cout << "\nYou gained 60 experience.\n" << std::endl;
+    }
     std::cout << R"(You approach the table with the confidence of a seasoned hero—only to be met with blank stares.
         A grizzled dwarf squints at you and mutters, "Table’s full... of people who bathe."
         Laughter follows, and someone silently slides a crusty potato toward you.

@@ -132,7 +132,7 @@ Item Enemy::generateDrop(int luck) const {
         rarity = ItemRarity::COMMON;
     } else if (roll < 80-mod*level/2-luck/2) {
         rarity = ItemRarity::RARE;
-    } else if (roll < 95-mod*level/4-luck/4) {
+    } else if (roll < 100-mod*level/4-luck/4) {
         rarity = ItemRarity::EPIC;
     } else {
         rarity = ItemRarity::LEGENDARY;

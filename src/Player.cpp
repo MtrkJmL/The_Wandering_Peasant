@@ -183,7 +183,7 @@ bool Player::getMoltoTalked() const {
 void Player::levelUp() {
     level++;
     experience -= experienceToNextLevel;
-    experienceToNextLevel = static_cast<int>(experienceToNextLevel * 1.5);
+    experienceToNextLevel = static_cast<int>(experienceToNextLevel * 1.6);
     
     maxHealth += 20;
     health = maxHealth;

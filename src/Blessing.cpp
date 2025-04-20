@@ -40,7 +40,7 @@ Blessing Blessing::generateKirikBlessing() {
 Blessing Blessing::generateBerxesBlessing() {
     // Example berxes blessings
     static const std::vector<Blessing> berxesBlessings = {
-        Blessing("Titan's Wrath", "Your next attack deals triple damage, but you sacrifice 20 health", BlessingRarity::BERXES),
+        Blessing("Titan's Wrath", "Your next attack deals triple damage, but you sacrifice 35 health", BlessingRarity::BERXES),
         Blessing("Crushing Momentum", "Next turn, you will heal for the amount of damage you deal", BlessingRarity::BERXES),
     };
     

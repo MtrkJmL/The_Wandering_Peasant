@@ -15,7 +15,7 @@ int main() {
                                                                |___/                                      
 
         )" << std::endl;
-        std::cout << "Welcome to the Wandering Peasant (ver 1.02)!\n";
+        std::cout << "Welcome to the Wandering Peasant (ver 1.03)!\n";
         std::cout << "------------------------\n\n";
         std::cout << "You are but a humble peasant, born of soil and sweat, wandering the vast and perilous world.\n";
         std::cout << "For years, your hands tilled the earth, your heart content beneath a thatched roof and golden fields. But fate is cruel. \n";
