@@ -118,3 +118,11 @@ After building, navigate to the directory containing the executable (`build` on 
 *   **Linux/macOS:** `./wandering_peasant`
 *   **Windows:** `.\wandering_peasant.exe`
 
+## 🛠️ License
+
+**MIT License** — Like a trusty blade from Molto’s forge, this code is free to wield, sharpen, or reforge.  
+Just don’t forget who handed it to you, and blame yourself if it backfires!
+
+Full license text available here: [MIT License](https://opensource.org/licenses/MIT)
+
+
