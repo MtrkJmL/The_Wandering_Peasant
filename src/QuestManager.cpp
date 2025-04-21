@@ -22,7 +22,7 @@ void QuestManager::takeQuest(const std::string& questId) {
     auto it = quests.find(questId);
     if (it != quests.end()) {
         it->second.take();
-        std::cout << "\nQuest taken: " << it->second.getName() << "\n";
+        std::cout << "\nQuest taken: " << it->second.getName() << "\n\n";
     }
 }
 
@@ -30,7 +30,7 @@ void QuestManager::completeQuest(const std::string& questId) {
     auto it = quests.find(questId);
     if (it != quests.end()) {
         it->second.complete();
-        std::cout << "\nQuest completed: " << it->second.getName() << "\n";
+        std::cout << "\nQuest completed: " << it->second.getName() << "\n\n";
     }
 }
 

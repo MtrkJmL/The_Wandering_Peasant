@@ -71,6 +71,12 @@ Enemy::Enemy(const std::string& name, int level, EnemyType type)
             goldReward += 50;
             experienceReward += 50;
             break;
+        case EnemyType::SIR_G_P_SQUIRE:
+            weapon = Item(ItemType::WEAPON, "Knight's Sword", 1, 50, 0);
+            armor = Item(ItemType::ARMOR, "Plate Armor", 1, 50, 0);
+            goldReward += 200;
+            experienceReward += 150;
+            break;
     }
 }
 
@@ -124,6 +130,9 @@ Item Enemy::generateDrop(int luck) const {
             break;
         case EnemyType::ORC:
             mod = 3;
+            break;
+        case EnemyType::SIR_G_P_SQUIRE:
+            mod = 12;
             break;
         default:
             break;

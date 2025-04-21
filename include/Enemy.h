@@ -8,7 +8,8 @@ enum class EnemyType {
     TROLL,
     BANDIT,
     SKELETON,
-    DRAGON
+    DRAGON,
+    SIR_G_P_SQUIRE
 };
 
 class Enemy {

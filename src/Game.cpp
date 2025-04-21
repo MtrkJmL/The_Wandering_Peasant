@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 
+
 // Cross-platform implementation of _kbhit() for Unix-like systems
 int _kbhit() {
     struct timeval tv = { 0L, 0L };
@@ -40,6 +41,16 @@ int _getch() {
     return c;
 }
 #endif
+
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+#define BOLD    "\033[1m"
 
 Game::Game() : player("Hero"), isRunning(false), totalEnemiesDefeated(0), 
                encounterCount(0), isMiniBossEncounter(false), isFinalBossEncounter(false) {
@@ -74,7 +85,7 @@ void playMainMenuMelody() {
 
 void Game::displayMainMenu() {
     while (isRunning) {
-        std::cout << "\n=== 🌾🗡️ The Wandering Peasant 🔥🐉 ===\n";
+        std::cout << YELLOW << "\n=== 🌾🗡️ The Wandering Peasant 🔥🐉 ===\n"<< RESET;
         std::cout << "1. Start New Adventure\n";
         std::cout << "2. Exit\n";
         std::cout << "Choice: ";
@@ -85,7 +96,7 @@ void Game::displayMainMenu() {
         if (!(std::cin >> choice)) {
             std::cin.clear(); // Clear error flags
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            std::cout << "Invalid input! I guess peasants don't know how to read.\n";
+            std::cout << RED << "Invalid input! I guess peasants don't know how to read.\n" << RESET;
             continue;
         }
 
@@ -97,7 +108,7 @@ void Game::displayMainMenu() {
                 isRunning = false;
                 break;
             default:
-                std::cout << "That's why you are a peasant! Choose a valid option (1-2)!\n";
+                std::cout << RED << "That's why you are a peasant! Choose a valid option (1-2)!\n" << RESET;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 break;
         }
@@ -109,51 +120,62 @@ void Game::startNewGame() {
     questManager.addQuest(Quest("1", "Bitter Ballads", "Ahmed seeks vengeance on his rival who stole his song and his spotlight — put an end to the egomaniac’s tune once and for all."));
     questManager.addQuest(Quest("2", "Banger of a Stone", "You’ve found a glowing stone with a note reading: 'Molto, here’s something for you to bang.' It’s time to find Molto and see what he can forge from this strange stone—who knows what chaos he’ll create."));
     questManager.addQuest(Quest("3", "He Who Stole My Boots", "An old, tattered advert nailed to a tree by the roadside, announcing that a man is urgently seeking a pair of boots. Description matches your Traveler's Boots. The reward for returning them may be far more than you bargained for."));
+    questManager.addQuest(Quest("4", "Knightmare Navigation", "Help Sir G.P.Squire find his way back through the confusing lands of Peasaterra."));
     std::string playerName;
-    std::cout << "\nYour peasant is called: ";
+    std::cout << YELLOW << "\nYour peasant is called: " << RESET;
     std::cin >> playerName;
     
     player = Player(playerName);
     std::cout << playerName << " had a wonderful childhood.\n";
     std::cout << "\nWhen it came to hide-and-seek, none could match him. Some said it was skill, others... something more. He always triumphed, for he was:\n\n";
-    std::cout << "1. ⚡ Fleet of Foot — “The wind itself envied his stride.” (+3 max stamina)\n";
-    std::cout << "2. 🍀 Blessed by Lady Luck — “Dice rolled kindly, doors creaked just right, and shadows always favored him.” (+5 luck)\n";
-    std::cout << "3. 💰 Rich as Croesus — “The gold coins clinked like a symphony of fortune.” (+250 gold)\n";
-    std::cout << "4. 🤝 Ally of the Underclans — “His goblin friends were always looking out for him.” (Knows goblins)\n";
-    std::cout << "5. 🪙 Silver Tongue — “With a wink, a coin, and a few carefully chosen words, he could sway even the most hardened heart. The art of persuasion was his to command.” (+2 level bribery skill)\n";
-    std::cout << "6. ⚔️ Forged in Fire — “Before his first breath of adventure, he was given a blade that gleamed with the fire of a blacksmith’s craft and armor strong enough to turn aside a dragon’s breath.” (Better Starting Weapon and Armor)\n";
-    std::cout << "7. 🏃‍♂️ One Step Ahead — “While others began their journey, he was already in motion, far beyond where they’d started. His early steps paved the way for greatness.” (Starts at Level 2)\n";
-    std::cout << "8. 🏺 Relic of the Past — “A powerful relic rests in his hands, an heirloom of forgotten times, radiating mysterious energy. But alas, his armor is but humble peasant clothes, offering little protection.” (Starts with a rare relic, but only with peasant clothes)\n";
-    std::cout << "9. 🕳️ Cursed with Misfortune — “Ah, my mistake. This little one was a loser. Every twig snapped, every sneeze betrayed him. Even the trees seemed to point him out.” (-10 luck)\n";
-    std::cout << "Choose your past:";
+    std::cout << "1. ⚡" << BOLD << " Fleet of Foot " << RESET << "— “The wind itself envied his stride.” (+3 max stamina)\n";
+    std::cout << "2. 🍀" << BOLD << " Blessed by Lady Luck " << RESET << "— “Dice rolled kindly, doors creaked just right, and shadows always favored him.” (+5 luck)\n";
+    std::cout << "3. 💰" << BOLD << " Rich as Croesus " << RESET << "— “The gold coins clinked like a symphony of fortune.” (+250 gold)\n";
+    std::cout << "4. 🤝" << BOLD << " Ally of the Underclans " << RESET << "— “His goblin friends were always looking out for him.” (Knows goblins)\n";
+    std::cout << "5. 🪙" << BOLD << " Silver Tongue " << RESET << "— “With a wink, a coin, and a few carefully chosen words, he could sway even the most hardened heart. The art of persuasion was his to command.” (+2 level bribery skill)\n";
+    std::cout << "6. ⚔️" << BOLD << " Forged in Fire " << RESET << "— “Before his first breath of adventure, he was given a blade that gleamed with the fire of a blacksmith’s craft and armor strong enough to turn aside a dragon’s breath.” (Better Starting Weapon and Armor)\n";
+    std::cout << "7. 🏃‍♂️" << BOLD << " One Step Ahead " << RESET << "— “While others began their journey, he was already in motion, far beyond where they’d started. His early steps paved the way for greatness.” (Starts at Level 2)\n";
+    std::cout << "8. 🏺" << BOLD << " Relic of the Past " << RESET << "— “A powerful relic rests in his hands, an heirloom of forgotten times, radiating mysterious energy. But alas, his armor is but humble peasant clothes, offering little protection.” (Starts with a rare relic, but only with peasant clothes)\n";
+    std::cout << "9. 🕳️" << BOLD << " Cursed with Misfortune " << RESET << "— “Ah, my mistake. This little one was a loser. Every twig snapped, every sneeze betrayed him. Even the trees seemed to point him out.” (-10 luck)\n";
+    std::cout << YELLOW << "Choose your past: " << RESET;
     int past;
     std::cin >> past;
     Beep(200,100);
-    if (past == 1) {
+    switch (past) {
+    case 1:
         player.setMaxStamina(3);
-    } else if (past == 2) {
+        break;
+    case 2:
         player.setLuck(5);
-    } else if (past == 3) {
+        break;
+    case 3:
         player.addGold(250);
-    } else if (past == 4) {
+        break;
+    case 4:
         player.learnEnemyType(EnemyType::GOBLIN);
-    } else if (past == 5) {
+        break;
+    case 5:
         player.improveBriberySkill();
         player.improveBriberySkill();
-    } else if (past == 6) {
+        break;
+    case 6:
         player.equipWeapon(Item(ItemType::WEAPON, "Less Rusty Sword", 1, 6, 4));
         player.equipArmor(Item(ItemType::ARMOR, "Chainmail", 1, 6, 2));
-    } else if (past == 7) { 
+        break;
+    case 7: 
         player.levelUp();
         player.addExperience(100);
-    } else if (past == 8) {
+        break;
+    case 8:
         player.equipRelic(Relic::generateRareRelic());
-        player.equipArmor(Item(ItemType::ARMOR, "Peasant Clothes", 1, 1, 1));
-    } else if (past == 9) {
+        player.equipArmor(Item(ItemType::ARMOR, "Peasant Clothes", 0, 1, 1));
+        break;
+    case 9:
         player.setLuck(-10);
+        break;
     }
     // Offer starting relic selection
-    std::cout << "\nChoose your starting relic:\n";
+    std::cout << "\n" << YELLOW << "Choose your starting relic: " << RESET << "\n";
     Relic relic1 = Relic::generateCommonRelic();
     Relic relic2 = Relic::generateCommonRelic();
     Relic relic3 = Relic::generateCommonRelic();
@@ -162,7 +184,7 @@ void Game::startNewGame() {
     std::cout << "2. " << relic2.getName() << " - " << relic2.getDescription() << "\n";
     std::cout << "3. " << relic3.getName() << " - " << relic3.getDescription() << "\n";
     std::cout << "4. Don't choose any\n";
-    std::cout << "Choice: ";
+    std::cout << YELLOW << "Choice: " << RESET;
     
     int choice;
     std::cin >> choice;
@@ -177,18 +199,18 @@ void Game::startNewGame() {
     }
     
     while (player.isAlive() && isRunning) {
-        std::cout << "\n=== What will " << player.getName() << " do now? ===\n";
+        std::cout << YELLOW << "\n=== What will " << player.getName() << " do now? ===\n" << RESET;
         std::cout << "1. Wander around more\n";
         std::cout << "2. Rest\n";
         std::cout << "3. View Stats\n";
         std::cout << "4. Quit Game\n";
-        std::cout << "Choice: ";
+        std::cout << YELLOW << "Choice: " << RESET;
 
         int choice;
         if (!(std::cin >> choice)) {
             std::cin.clear(); // Clear error flags
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            std::cout << "Invalid input! Please enter a number.\n";
+            std::cout << RED << "Invalid input! Please enter a number.\n" << RESET;
             continue;
         }
         Beep(200,100);
@@ -206,7 +228,7 @@ void Game::startNewGame() {
                 isRunning = false;
                 break;
             default:
-                std::cout << "That's why you are a peasant! Choose a valid option (1-4)!\n";
+                std::cout << RED << "That's why you are a peasant! Choose a valid option (1-4)!\n" << RESET;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 break;
         }
@@ -219,21 +241,23 @@ void Game::startNewGame() {
 
 void Game::displayPlayerStats() {
     std::cout << "\n══════════════════════════════════════════════\n";
-    std::cout << "         📜 " << player.getName() << "'s Stats (Peasant)         \n";
+    std::cout << "         📜 " << BOLD << player.getName() << "'s Stats (Peasant) " << RESET << "         \n";
     std::cout << "══════════════════════════════════════════════\n";
 
     std::cout << "══════════════════╦═══════════════════════════\n";
-    std::cout << " Level            ║ " << std::setw(24) << player.getLevel() << " \n";
-    std::cout << " Health           ║ " << std::setw(6) << player.getHealth() 
-              << " / " << std::setw(14) << player.getMaxHealth() << " \n";
-    std::cout << " Stamina          ║ " << std::setw(6) << player.getStamina() 
-              << " / " << std::setw(14) << player.getMaxStamina() << " \n";
-    std::cout << " Gold             ║ " << std::setw(24) << player.getGold() << " \n";
-    std::cout << " Experience       ║ " << std::setw(6) << player.getExperience() 
-              << " / " << std::setw(14) << player.getExperienceToNextLevel() << " \n";
+    std::cout << " Level            ║ " << std::setw(24) << BOLD << player.getLevel() << RESET << " \n";
+    std::cout << " Health           ║ " << std::setw(6) << BOLD << player.getHealth() 
+              << " / " << std::setw(14) << BOLD << player.getMaxHealth() << RESET << " \n";
+    std::cout << " Stamina          ║ " << std::setw(6) << BOLD << player.getStamina() 
+              << " / " << std::setw(14) << BOLD << player.getMaxStamina() << RESET << " \n";
+    std::cout << " Defense          ║ " << std::setw(6) << BOLD << player.getDefense() << RESET << " \n";
+    std::cout << " Luck             ║ " << std::setw(6) << BOLD << player.getLuck() << RESET << " \n";
+    std::cout << " Gold             ║ " << std::setw(24) << BOLD << player.getGold() << RESET << " \n";
+    std::cout << " Experience       ║ " << std::setw(6) << BOLD << player.getExperience() 
+              << " / " << std::setw(14) << BOLD << player.getExperienceToNextLevel() << RESET << " \n";
     std::cout << "══════════════════╩═══════════════════════════\n";
 
-    std::cout << "\n🛡️  EQUIPMENT\n";
+    std::cout << "\n" << YELLOW << "🛡️  EQUIPMENT" << RESET << "\n";
     std::cout << "══════════════════════════════════════════════\n";
     std::cout << " Weapon: " << std::setw(37) << std::left 
               << (player.getWeapon().getName() + " " + player.getWeapon().getStatsString()) << " \n";
@@ -243,13 +267,13 @@ void Game::displayPlayerStats() {
               << (player.getEquippedRelic().getName() + " - " + player.getEquippedRelic().getDescription()) << " \n";
     std::cout << "══════════════════════════════════════════════\n";
 
-    std::cout << "\n🧭 QUEST LOG\n";
+    std::cout << "\n" << YELLOW << "🧭 QUEST LOG" << RESET << "\n";
 std::cout << "══════════════════════════════════════════════\n";
-    std::cout << "📌 Active Quests:\n";
+    std::cout << "📌 " << BLUE << "Active Quests:" << RESET << "\n";
     // Active quests
     questManager.showActiveQuests();
 
-    std::cout << "\n✅ Completed Quests:\n";
+    std::cout << "\n" << GREEN << "✅ Completed Quests:" << RESET << "\n";
     questManager.showCompletedQuests();
         
 
@@ -257,9 +281,10 @@ std::cout << "══════════════════════
 
 std::cout << "\n══════════════════════════════════════════════\n";
 
-    std::cout << "\n🔸 Press Enter to continue...";
+    std::cout << "\n" << YELLOW << "🔸 Press Enter to continue..." << RESET;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
+    Beep(200,100);
 }
 
 void Game::handleWandering() {
@@ -290,7 +315,7 @@ void Game::handleWandering() {
 void Game::handleBranchingPath() {
     std::cout << "\nYou come to a fork in the road.\n";
     if(questManager.hasQuest("3") && questManager.getStatus("3") == QuestStatus::NOT_TAKEN && player.getEquippedRelic().getName() == "[🔵]Traveler's Mighty Boots"){
-        std::cout << R"(
+        std::cout << YELLOW << R"(
 As you traverse the winding road, the sun beginning its slow descent behind the distant hills, something catches your eye. Tacked to a nearby tree is a hastily scrawled notice, fluttering slightly in the breeze. The ink is smeared in places, but the message is clear:
 
 "LOST BOOTS — Reward Offered!"
@@ -302,7 +327,7 @@ _"A man of great discretion seeks a pair of sturdy boots to replace his. If you 
 The note ends with an odd symbol, one that seems familiar yet distant, a mark of a clan you have yet to place.
 
 
-)" << std::endl;
+)" << RESET << std::endl;
         questManager.takeQuest("3");
 
     }
@@ -410,7 +435,7 @@ The note ends with an odd symbol, one that seems familiar yet distant, a mark of
                 player.addGold(goldAmount);
             } else {
                 if(questManager.hasQuest("2") && questManager.getStatus("2") == QuestStatus::NOT_TAKEN){
-                    std::cout << R"(
+                    std::cout << YELLOW << R"(
         You pry open the ancient treasure chest — the hinges groan like a dying beast.
         Inside, nestled among faded baubles and forgotten relics, lies a glowing stone pulsing with heat.
         A crumpled parchment rests beside it, scrawled with hasty ink:
@@ -418,7 +443,7 @@ The note ends with an odd symbol, one that seems familiar yet distant, a mark of
             'Molto, here’s something worthy of your eternal banging.'
 
         The stone hums in your palm. Whoever this 'Molto' is, you sense the forge of fate is already burning.
-    )";
+    )" << RESET << std::endl;
                     
                         questManager.takeQuest("2");
                     }
@@ -440,9 +465,127 @@ The note ends with an odd symbol, one that seems familiar yet distant, a mark of
         } else if (rightRoll < 90) {
             handleMarket();
         } else {
-            int goldAmount = (std::rand() % 50 + 10) * player.getLevel();
-            std::cout << "\nYou found " << goldAmount << " gold in the pile!\n";
-            player.addGold(goldAmount);
+            int chestRoll = std::rand() % 100;
+            if(chestRoll < 50){
+                int goldAmount = (std::rand() % 50 + 10) * player.getLevel();
+                std::cout << "\nYou found " << goldAmount << " gold in the pile!\n";
+                player.addGold(goldAmount);
+            }
+            else{
+                if(questManager.hasQuest("4") && questManager.getStatus("4") == QuestStatus::NOT_TAKEN){
+                    std::cout << YELLOW << R"(
+You step forward, heart pounding with dreams of loot...
+
+CLANG!
+
+A figure crashes out from behind the chest in a whirl of dented steel and misplaced confidence.
+
+A knight, if the term can stretch far enough, brandishes a sword with great ceremony (and very little control).
+
+)" << RESET << std::endl;
+
+    std::cout << YELLOW << "Sir G.P.Squire: “HALT, knave! By the authority of His Most Vague Majesty, I guard this chest!”\n" << RESET;
+    std::cout << YELLOW << "“Declare thyself: Are you a royal courier—or a lowly treasure thief seeking to plunder the sacred chest of the kingdom?”\n\n" << RESET;
+
+    std::cout << "1. \"I’m no thief! The king sent me to escort this chest!\"\n";
+    std::cout << "2. \"If I were a thief, would I *walk* up to a knight with this chin?\"\n";
+    std::cout << "Choice: ";
+
+    int choice1;
+    std::cin >> choice1;
+
+    if (choice1 == 1) {
+        std::cout << YELLOW << R"(
+Sir G.P.Squire's eye twitches beneath his helm.
+
+“HAH! I knew it! The courier lies dead behind that bush!”
+
+He points with dramatic flair to a stiff, half-eaten corpse behind a nearby tree.
+
+“You dare impersonate a royal courier?! This chest is sacred!”
+
+Sir G.P.Squire attacks in the name of justice (and misplaced vengeance)!
+)" << RESET << std::endl;
+    std::cout << "Press Enter to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
+    Beep(200,100);
+    handleEncounter(Enemy("Sir G.P.Squire", player.getLevel()+5, EnemyType::SIR_G_P_SQUIRE), Terrain::generateRandomTerrain());
+
+    } else {
+        std::cout << YELLOW << R"(
+Sir G.P.Squire lowers his blade just slightly, squinting at you.
+
+“Hmph. Not the usual excuse… Very well. One more test.”
+
+He clears his throat, standing proudly.
+
+“Tell me, wanderer—what lies at the Summit of the Slain?”
+)" << RESET << std::endl;
+
+        std::cout << "1. \"Glory... and a name written in fire.\"\n";
+        std::cout << "2. \"Probably a bunch of bird poop, honestly.\"\n";
+        std::cout << "Choice: ";
+
+        int choice2;
+        std::cin >> choice2;
+
+        if (choice2 == 1) {
+            std::cout << YELLOW << R"(
+Sir G.P.Squire gasps.
+
+“That... that is exactly what the legends say. You speak as Kırık once did.”
+
+He sheaths his sword with theatrical grace.
+
+“Take this, wanderer. 'Tis the Featherstone Whistle. When you reach the Summit of the Slain... blow it.”
+
+“I shall come. For glory, for answers, for..."
+
+You blow the whistle, loudly and proudly.
+
+He freezes.
+His helmet slowly turns toward you.
+A long sigh echoes from within.
+
+"That... was a test blow, was it? Surely. Just a test..."
+He stares at the sky for a moment, as if questioning every decision that led him here.
+
+"No matter. My fate now lies in the hands of a peasant who whistles at random tree stumps."
+He presses the whistle back into your palm.
+"At the Summit of the Slain, you fool. Blow it there. Not here. Not now. Gods help me."
+
+You vanish into the bushes without answering.
+Somewhere in the distance, a hawk cries... perhaps in disappointment.
+)" << RESET << std::endl;
+
+            questManager.takeQuest("4");
+        } else {
+            std::cout << YELLOW << R"(
+Sir G.P.Squire growls.
+
+“Blasphemy! That summit is sacred, not a roost for pigeons!”
+
+He raises his blade once more.
+
+Prepare for a duel!
+)" << RESET << std::endl;
+            std::cout << "Press Enter to continue...";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            Beep(200,100);
+            handleEncounter(Enemy("Sir G.P.Squire", player.getLevel()+5, EnemyType::SIR_G_P_SQUIRE), Terrain::generateRandomTerrain());
+        }
+    }
+                }
+                else{
+                    int goldAmount = (std::rand() % 50 + 10) * player.getLevel() * 1.3;
+                    std::cout << "\nYou are in luck! You found " << goldAmount << " gold in the treasure chest!\n";
+                    player.addGold(goldAmount);
+
+                }
+            }
+            
         }
     } else {
         std::cout << "You wait at the crossroads in silence, and the sun rises on an unchosen path.\n";
@@ -453,7 +596,7 @@ void Game::handleNPCInteraction(NPCType type) {
     switch (type) {
         case NPCType::BLACKSMITH:
             if(player.getMoltoTalked() && questManager.hasQuest("2") && questManager.getStatus("2") == QuestStatus::TAKEN){
-                std::cout << R"(
+                std::cout << YELLOW << R"(
     'Ah, a peasant seeking craftsmanship, eh?' he grins, his eyes gleaming with pride. 
     'What brings you to my humble forge, traveler?'
 
@@ -461,7 +604,7 @@ void Game::handleNPCInteraction(NPCType type) {
 
     The blacksmith raises an eyebrow, his grin widening. 
     'Molto, eh? He knows his way around a good forge. Alright, I'll do it. But I warn ye—this won't be a simple task.'
-    )" << std::endl;
+    )" << RESET << std::endl;
         char choice;
         std::cout << "This will cost you 1000 gold\n";
         std::cout << "Do you want to proceed? (y/n)\n";
@@ -470,21 +613,21 @@ void Game::handleNPCInteraction(NPCType type) {
         Beep(200,100);
         if((choice == 'y' || choice == 'Y') && player.getGold() >= 1000){
             player.spendGold(1000);
-            std::cout << R"(
+            std::cout << YELLOW << R"(
     He motions for you to hand over the gem.
     'Give me a moment, lad/lass. I'll heat this to the right temperature. Just don’t go wanderin' off!'
-    )" << std::endl;
+    )" << RESET << std::endl;
         player.equipWeapon(Item(ItemType::WEAPON, "Molto's Banger of a Hammer", 4, 10, 0));
         questManager.completeQuest("2");
         std::cout << "\nYou gained 250 experience.\n" << std::endl;
         player.addExperience(250);
         }
         else{
-            std::cout << R"(
+            std::cout << YELLOW << R"(
     The blacksmith scowls, his hammer clanking hard against the anvil. 
     'Wastin’ my time, are ye? Come back when you've grown a spine!' 
     With a grunt, he shoves you out the door — soot, smoke, and all.
-    )" << std::endl;
+    )" << RESET << std::endl;
             return;
         }
 
@@ -583,7 +726,7 @@ void Game::handleNPCInteraction(NPCType type) {
         case NPCType::AHMED:
             NPC npc(NPCType::AHMED);
             if(player.getBardBeaten() && questManager.hasQuest("1") && questManager.getStatus("1") == QuestStatus::TAKEN){
-                std::cout << R"(
+                std::cout << YELLOW << R"(
                 Ahmed gives a slow, knowing nod as you return.
 
                 "So... the winds carried whispers of a humbled tune. 
@@ -597,7 +740,7 @@ void Game::handleNPCInteraction(NPCType type) {
                 "You’ve done a great service, not just for me — but for song itself."
 
                 "May this aid your journey, and may your path be ever accompanied by worthy echoes."
-                )" << "\n\n";
+                )" << RESET << std::endl;
                 questManager.completeQuest("1");
                 std::cout << "Your luck is increased by 30!\n\n";
                 player.setLuck(30);
@@ -655,11 +798,11 @@ void Game::handleNPCInteraction(NPCType type) {
                 case 3:
                     if(questManager.getStatus("1") == QuestStatus::NOT_TAKEN){
                         
-                        std::cout <<"\n\n" <<R"(
+                        std::cout <<"\n\n" << YELLOW << R"(
     Ahmed: 'I will teach you the song you want. But first, I have a task for you. 
     There’s a pompous, spotlight-stealing charlatan prancing around as a bard—calls himself 'The Minstrel of Might.' 
     He stole my songs, my stage, and my dignity. I want you to find this egomaniac and challenge him to a bardic showdown. 
-    Beat him at his own game, and I’ll make it worth your while. The tavern will sing of your glory—and I’ll finally sleep without rage in my heart.')";
+    Beat him at his own game, and I’ll make it worth your while. The tavern will sing of your glory—and I’ll finally sleep without rage in my heart.')" << RESET << std::endl;
                         questManager.takeQuest("1");
                         }
                     std::cout << "Which song would you like to hear?\n";
@@ -762,10 +905,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
     while (enemy.isAlive() && player.isAlive()) {
         // Clear screen and display battle UI
         std::cout << "\n\n";
-        std::cout << "╔════════════════════════════════════════════════╗\n";
+        std::cout << BOLD << "╔════════════════════════════════════════════════╗\n";
         std::cout << "║              ⚔️  BATTLE COMMENCES  ⚔️          ║\n";
-        std::cout << "╚════════════════════════════════════════════════╝\n\n";
-        std::cout << "Terrain: " << terrain.getName() << "!\n";
+        std::cout << "╚════════════════════════════════════════════════╝\n\n" << RESET;
+        std::cout << "  Terrain: " << terrain.getName() << "!\n";
         // Display player stats with hearts   
          std::cout << "  " << player.getName() << " (Level " << player.getLevel() << ")\n";
        
@@ -785,6 +928,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         std::cout << "  Relic: " << player.getEquippedRelic().getName() << " - " << player.getEquippedRelic().getDescription() << "\n\n";
         
         // Display enemy stats with hearts
+        /*
         std::string enemyName;
         switch (enemy.getType()) {
             case EnemyType::GOBLIN: enemyName = "Goblin"; break;
@@ -794,8 +938,9 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             case EnemyType::SKELETON: enemyName = "Skeleton"; break;
             case EnemyType::DRAGON: enemyName = "Dragon"; break;
         }
+        */
         
-        std::cout << "  " << enemyName << " (Level " << enemy.getLevel() << ")\n";
+        std::cout << "  " << enemy.getName() << " (Level " << enemy.getLevel() << ")\n";
         std::cout << "  Health: ";
         int enemyHearts = (enemy.getHealth() * 10) / enemy.getMaxHealth();
         for (int i = 0; i < 10; i++) {
@@ -803,19 +948,19 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         }
         std::cout << " " << enemy.getHealth() << "/" << enemy.getMaxHealth() << "\n";
         if (enemy.isBleeding()) {
-            std::cout << "  Status: 🩸 Bleeding!\n";
+            std::cout << "  Status: " << RED << "🩸 Bleeding!" << RESET << "\n";
         }
         if (enemy.isBlinded()) {
-            std::cout << "  Status: ❌👁 Blinded!\n";
+            std::cout << "  Status: " << YELLOW << "❌👁 Blinded!" << RESET << "\n";
         }
         if (enemy.isPoisoned()) {
-            std::cout << "  Status: ☠️ Poisoned!\n";
+            std::cout << "  Status: " << GREEN << "☠️ Poisoned!" << RESET << "\n";
         }
         std::cout << "\n";
         
-        std::cout << "\n╔══════════════════════════════════════════════╗\n";
+        std::cout << GREEN << "\n╔══════════════════════════════════════════════╗\n";
         std::cout <<   "║            ⚔️  YOUR TURN  ⚔️                 ║\n";
-        std::cout <<   "╚══════════════════════════════════════════════╝\n";
+        std::cout <<   "╚══════════════════════════════════════════════╝\n" << RESET;
         std::cout << "Choose your action:\n";
         std::cout << "1. Light Attack (1 stamina) - Quick strike\n";
         std::cout << "2. Heavy Attack (2 stamina) - Powerful blow (may backfire)\n";
@@ -907,44 +1052,44 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 std::cout << "\n";
                 if(terrain.shouldHeal()) {
                     player.heal(10);
-                    std::cout << "As the soothing rains of the Whispering Thicket wash over you, your wounds begin to mend — nature grants you a moment of peace!\n";
-                    std::cout << "As you hear a whisper in the distance,tales of the ancient battle of the Dark Bloods echo through the trees... !\n";
-                    std::cout << "You regain 10 health!\n";
+                    std::cout << YELLOW << "As the soothing rains of the Whispering Thicket wash over you, your wounds begin to mend — nature grants you a moment of peace!\n" << RESET;
+                    std::cout << YELLOW << "As you hear a whisper in the distance,tales of the ancient battle of the Dark Bloods echo through the trees... !\n" << RESET;
+                    std::cout << YELLOW << "You regain 10 health!\n" << RESET;
                 }
                 bool isCrit = false;
                 int damage = player.timingBasedAttack(cursorPosition, totalPositions, isHeavyAttack, isCrit);
                 if(isCrit) {
                     reflectStack = 0;
                     if(terrain.shouldReflect()) {
-                        std::cout << "Your strike lands true — a perfect blow that disrupts the Dragon King’s Eclipsefire Cataclysm, forcing him to recoil in fury!\n";
+                        std::cout << YELLOW << "Your strike lands true — a perfect blow that disrupts the Dragon King’s Eclipsefire Cataclysm, forcing him to recoil in fury!\n" << RESET;
                     }
                 }
                 if (terrain.shouldMissAttack()) {
-                    std::cout << "You swing your weapon, but the treacherous ice beneath your feet betrays your footing — the strike goes wide, slicing only the cold air!\n";
-                    std::cout << "You lose your turn!\n";
+                    std::cout << YELLOW << "You swing your weapon, but the treacherous ice beneath your feet betrays your footing — the strike goes wide, slicing only the cold air!\n" << RESET;
+                    std::cout << YELLOW << "You lose your turn!\n" << RESET;
                     damage = 0;
                 }
                 if (damage > 0) {
                     if(berxesActive && player.getEquippedBlessing().getName() == "Titan's Wrath"){
                         damage *= 3;
                         player.takeDamage(35);
-                        std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
+                        std::cout << MAGENTA << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n" << RESET;
                         player.useBlessing();
                         berxesActive = false;
                     }
                     if(berxesActive && player.getEquippedBlessing().getName() == "Crushing Momentum"){
                         player.heal(damage);
-                        std::cout << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n";
+                        std::cout << MAGENTA << "Champion BERXES's ambition from battlefield trembles the earth with unyielding fury.\n" << RESET;
                         player.useBlessing();
                         berxesActive = false;
                     }
                     enemy.takeDamage(damage);
                     std::cout << "\nYou strike with your " << player.getWeapon().getName() << "!\n";
-                    std::cout << "Damage dealt: " << damage << "\n";
+                    std::cout << "Damage dealt: " << GREEN << damage << RESET << "\n";
                     if(terrain.shouldEcho()) {
-                        std::cout << "The terrain echoes with the sound of your strike, causing a weak echo!\n";
+                        std::cout << YELLOW << "\nThe terrain echoes with the sound of your strike, causing a weak echo!\n" << RESET;
                         enemy.takeDamage(damage/2);
-                        std::cout << "The enemy takes " << damage/2 << " damage!\n";
+                        std::cout << YELLOW << "The enemy takes " << damage/2 << " damage!\n" << RESET;
                     }
                     /*
                     // 20% chance to cause bleeding for light attack, 40% for heavy
@@ -967,15 +1112,15 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                                     bleedStack += 1;
                                 }
                                 enemy.applyBleeding();
-                                std::cout << "🩸 The enemy starts bleeding!\n";
+                                std::cout << RED << "🩸 The enemy starts bleeding!\n" << RESET;
                                 break;
                             case StatusEffect::POISON:
                                 enemy.applyPoison();
-                                std::cout << "☠️ The enemy has been poisoned!\n";
+                                std::cout << GREEN << "☠️ The enemy has been poisoned!\n" << RESET;
                                 break;
                             case StatusEffect::BLINDNESS:
                                 enemy.applyBlindness();
-                                std::cout << "❌👁 The enemy is blinded!\n";
+                                std::cout << YELLOW << "❌👁 The enemy is blinded!\n" << RESET;
                                 break;
                             default:
                                 break; // No effect
@@ -987,7 +1132,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                             enemy.applyBleeding();
                             enemy.applyPoison();
                             enemy.applyBlindness();
-                            std::cout << "ALMIGHTY KIRIK's Blessing activates! The enemy is now bleeding, poisoned, and blinded!\n";
+                            std::cout << BLUE << "ALMIGHTY KIRIK's Blessing activates! The enemy is now bleeding, poisoned, and blinded!\n" << RESET;
                             
                         }
                         
@@ -1005,7 +1150,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     std::cout << enemy.getName() << ": '" << enemy.getDialogue() << "'\n";
                     std::cout << "The " << enemy.getName() << " dropped their weapon and left.\n";
                     Item drop = enemy.generateDrop(player.getLuck());
-                    std::cout << "\n" << enemyName << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
+                    std::cout << "\n" << enemy.getName() << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
                     std::cout << "1. Take it (equip " << (drop.getType() == ItemType::WEAPON ? "weapon" : "armor") << ")\n";
                     std::cout << "2. Leave it (sell for " << drop.getValue() << " gold)\n";
                     std::cout << "Choice: ";
@@ -1049,7 +1194,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     std::cout << "You already activated your blessing!\n";
                     break;
                 }
-                std::cout << "You activate your " << player.getEquippedBlessing().getName() << "!\n";
+                std::cout << "You activate your " << MAGENTA << player.getEquippedBlessing().getName() << RESET << "!\n";
                 if(player.getEquippedBlessing().getRarity() == BlessingRarity::KIRIK){
                     kirikActive = true;
                 } else if(player.getEquippedBlessing().getRarity() == BlessingRarity::BERXES){
@@ -1059,8 +1204,8 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 }
                 if(player.getEquippedBlessing().getName() == "Stadin Life" && !player.hasUsedBlessing()){
                     player.heal(50);
-                    std::cout << "Champion Stadin's ambition from battlefield echoes through the skies.\n";
-                    std::cout << "You regain 50 health!\n";
+                    std::cout << MAGENTA << "Champion Stadin's ambition from battlefield echoes through the skies.\n" << RESET;
+                    std::cout << MAGENTA << "You regain 50 health!\n" << RESET;
                     player.useBlessing();
                 }
                 if (player.getEquippedBlessing().getName() == "Pierce the Veil" && !player.hasUsedBlessing()) {
@@ -1075,8 +1220,8 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
                     // Shuffle the vector to randomize the order
                     
-                    std::cout << "Champion KIRIK's ambition from battlefield cracks the silence of the heavens.\n";
-                    std::cout << "The enemy is now bleeding, poisoned, and blinded!\n";
+                    std::cout << MAGENTA << "Champion KIRIK's ambition from battlefield cracks the silence of the heavens.\n" << RESET;
+                    std::cout << MAGENTA << "The enemy is now bleeding, poisoned, and blinded!\n" << RESET;
                     player.useBlessing();
                 }
                 if (player.getEquippedBlessing().getName() == "Echo of Agony" && !player.hasUsedBlessing()){
@@ -1090,20 +1235,21 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         }
         
         // Enemy's turn
-            std::cout << "\n╔══════════════════════════════════════════════╗\n";
+            std::cout << RED << "\n╔══════════════════════════════════════════════╗\n";
             std::cout <<   "║            ⚔️  ENEMY'S TURN  ⚔️              ║\n";
-            std::cout <<   "╚══════════════════════════════════════════════╝\n";
+            std::cout <<   "╚══════════════════════════════════════════════╝\n" << RESET;
         
+         
         // Apply bleeding damage if enemy is bleeding
         if (enemy.isBleeding()) {
             for(int i = 0; i < bleedStack; i++) {   
                 enemy.takeBleedingDamage();
                 
-                std::cout << "Each movement deepens their wounds — blood drips to the earth below!" << enemyName << " takes 2 damage from bleeding!\n";
+                std::cout << RED << "Each movement deepens their wounds — blood drips to the earth below!" << enemy.getName() << " takes 2 damage from bleeding!\n" << RESET;
                 if(kirikActive && player.getEquippedBlessing().getName() == "Echo of Agony"){
                     enemy.takeBleedingDamage();
-                    std::cout << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n";
-                    std::cout << enemyName << " takes 2 damage from bleeding!\n";
+                    std::cout << MAGENTA << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n" << RESET;
+                    std::cout << RED << enemy.getName() << " takes 2 damage from bleeding!\n" << RESET;
                 }
             }
         }
@@ -1112,10 +1258,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
         if(terrain.shouldReflect()) {
             if(reflectStack < 3) {
-            std::cout << "The Dragon King readies Eclipsefire Catacylsm! (" <<reflectStack <<"/3)\n";
+            std::cout << BOLD << "The Dragon King readies Eclipsefire Catacylsm! (" <<reflectStack <<"/3)\n" << RESET;
             reflectStack += 1;
             } else {
-                std::cout << "The Dragon King attacks with Eclipsefire Catacylsm! (" <<reflectStack <<" stacks)\n";
+                std::cout << BOLD << "The Dragon King attacks with Eclipsefire Catacylsm! (" <<reflectStack <<" stacks)\n" << RESET;
                 enemyRolled = 100;
                 reflectStack = 0;
             }
@@ -1124,54 +1270,54 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         if (enemy.isBlinded()) {
             enemy.blind();
             enemyRolled = 0;
-            std::cout << "The enemy swings wildly, their eyes clouded. " << enemyName << " strike finds no target!\n";
+            std::cout << YELLOW << "The enemy swings wildly, their eyes clouded. " << enemy.getName() << " strike finds no target!\n" << RESET;
         }
         
         if (enemy.isPoisoned()) {
             enemy.takePoisonDamage();
             if(kirikActive && player.getEquippedBlessing().getName() == "Echo of Agony"){
-                std::cout << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n";
+                std::cout << MAGENTA << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n" << RESET;
                 enemy.takePoisonDamage();
             }
         }
         if(enemy.getHealth() <= 0) {
-            std::cout << enemyName << " with a final gasp, staggers forward, as if to strike one last time...\n\n";
+            std::cout << enemy.getName() << " with a final gasp, staggers forward, as if to strike one last time...\n\n";
             enemyRolled = 0;
         }
-        std::cout << enemyName << " rolled a " << enemyRolled << " and you rolled a " << playerRolled << ".\n";
+        std::cout << enemy.getName() << " rolled a " << enemyRolled << " and you rolled a " << playerRolled << ".\n";
         if(player.getEquippedRelic().getName() == "[⚪]Iron Heart") {
             playerRolled += 2;
-            std::cout << "Iron Heart activates!\n";
+            std::cout << BLUE << "Iron Heart activates!\n" << RESET;
         }
         if(terrain.getDefenseModifier() > 0) {
             playerRolled += terrain.getDefenseModifier();
-            std::cout << "You feel the same ambition that once drove Lord KIRIK as he slew the ancient Dragon King on this summit.\n";
-            std::cout << "The weight of his triumph echoes through the summit, granting you +2 defense!\n";
+            std::cout << YELLOW << "You feel the same ambition that once drove Lord KIRIK as he slew the ancient Dragon King on this summit.\n" << RESET;
+            std::cout << YELLOW << "The weight of his triumph echoes through the summit, granting you +2 defense!\n" << RESET;
         }
         if(stadinActive && player.getEquippedBlessing().getName() == "Stillness of Stone" && stillnessOfStone > 0){
             playerRolled += 20;
-            std::cout << "Champion STADIN's ambition from battlefield echoes through the skies.\n";
+            std::cout << MAGENTA << "Champion STADIN's ambition from battlefield echoes through the skies.\n" << RESET;
             stillnessOfStone -= 1;
         }
         int enemyDamage = std::max(0, enemyRolled - playerRolled);
         if(terrain.getHealthModifier() > 0) {
             player.takeDamage(terrain.getHealthModifier());
-            std::cout << "As you try to hold your ground, the ground beneath you cracks, and the searing heat of the lava burns your skin-\n";
-            std::cout << "Because you are but a peasant, not a Dark Blood, causing you to lose " << terrain.getHealthModifier() << " health!\n";
+            std::cout << YELLOW << "As you try to hold your ground, the ground beneath you cracks, and the searing heat of the lava burns your skin-\n" << RESET;
+            std::cout << YELLOW << "Because you are but a peasant, not a Dark Blood, causing you to lose " << terrain.getHealthModifier() << " health!\n" << RESET;
         }
         if (enemyDamage > 0) {
             player.takeDamage(enemyDamage);
-            std::cout << enemyName << " lunges forward with a vicious slash!\n";
-            std::cout << "Damage taken: " << enemyDamage << "\n";
+            std::cout << enemy.getName() << " lunges forward with a vicious slash!\n";
+            std::cout << "Damage taken: " << RED << enemyDamage << RESET << "\n";
         } else {
             std::cout << "You raise your guard just in time — the attack glances off your weapon!\n";
         }
 
         if (!enemy.isAlive() && player.isAlive()) {
-            std::cout << "\n╔══════════════════════════════════════════════╗\n";
+            std::cout << YELLOW << "\n╔══════════════════════════════════════════════╗\n";
             std::cout <<   "║            ⚔️  VICTORY ACHIEVED! ⚔️          ║\n";
-            std::cout <<   "╚══════════════════════════════════════════════╝\n";
-            std::cout << "You defeated the " << enemyName << "!\n";
+            std::cout <<   "╚══════════════════════════════════════════════╝\n" << RESET;
+            std::cout << "You defeated the " << enemy.getName() << "!\n";
             Beep(880, 200);
             Beep(988, 200);
             Beep(1047, 300); 
@@ -1186,10 +1332,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             // Handle item drops
             if (std::rand() % 100 < 35 + player.getLuck()) { // 35% chance for item drop
                 Item drop = enemy.generateDrop(player.getLuck());
-                std::cout << "\n" << enemyName << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
+                std::cout << "\n" << enemy.getName() << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
                 std::cout << "1. Take it (equip " << (drop.getType() == ItemType::WEAPON ? "weapon" : "armor") << ")\n";
                 std::cout << "2. Leave it (sell for " << drop.getValue() << " gold)\n";
-                std::cout << "Choice: ";
+                std::cout << YELLOW << "Choice: " << RESET;
                 
                 std::cin >> choice;
                 Beep(200,100);
@@ -1205,17 +1351,47 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     std::cout << "You sell the " << drop.getName() << " for " << drop.getValue() << " gold!\n";
                 }
             }
+            if(terrain.getType() == TerrainType::MOUNTAIN && questManager.hasQuest("4") && questManager.getStatus("4") == QuestStatus::TAKEN){
+                std::cout << YELLOW << R"(
+    You raise the whistle to your lips and blow. The sound echoes across the summit, and within seconds, Sir G.P.Squire appears before you, his armor clanking with each step. 
+
+    You can’t help but blink in surprise. 'Wait, how did you get here so quickly? It was only a moment after I blew the whistle!'
+
+    Sir G.P.Squire, ever the confident knight, straightens his posture with a smug grin. 'Ah, simple. You see, I am Sir G.P.Squire—the master of finding the shortest path.' He taps his chest proudly. 'It’s in the name, after all!'
+
+    He pauses for effect, looking at you with a knowing expression as if his explanation has just solved the greatest mystery of the land.
+
+    'The shortest path?' you ask, still a bit confused.
+
+    'Exactly!' He says, throwing his hands wide. 'I always know where to go. It’s a gift, really. Call it my *legendary sense of direction*.' He gives a wink, clearly proud of himself.
+
+    'But you had no idea where Summit of the...', Sir G.P.Squire interrupts. 'Here is a reward for your efforts peasant! I don't need this sword anymore.'
+
+    He hands you a sword and starts watching the sky.
+
+    'I shall come. For glory, for answers, for...'
+
+    'I shall come. For glory, for answers, for...'
+
+    'I shall come. For glory, for answers, for...'
+    )" << RESET;
+            player.equipWeapon(Item(ItemType::WEAPON, "Glorious Path Seeker", player.getLevel(), player.getMaxStamina(), player.getLuck()));
+            questManager.completeQuest("4");
+            player.addExperience(100);
+            std::cout << "\nYou receive the Glorious Path Seeker!\n";
+            std::cout << "\nYou gained 100 experience.\n" << std::endl;
             break;
+            }
         }
         
         
         
         if (!player.isAlive()) {
             
-            std::cout << "\n========================================\n";
+            std::cout << RED << "\n========================================\n";
             std::cout << "            DEFEAT!                     \n";
-            std::cout << "========================================\n";
-            std::cout << "You have been defeated by the " << enemyName << "!\n";
+            std::cout << "========================================\n" << RESET;
+            std::cout << "You have been defeated by the " << enemy.getName() << "!\n";
             Beep(220, 400);  // A3 - 220 Hz, 400 ms
             Beep(174, 400);  // F3 - 174 Hz, 400 ms
             Beep(130, 400);  // C3 - 130 Hz, 400 ms (lower tone for drama)
@@ -1233,7 +1409,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
 void Game::handleFinalBoss() {
     Enemy finalBoss("Dragon King", 15, EnemyType::DRAGON); // Level 15 boss
-    std::cout << R"(
+    std::cout << YELLOW << R"(
 ╔══════════════════════════════════════════════════════════════╗
 ║                       🔥 TWO TITANS MEET 🔥                  ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -1249,16 +1425,16 @@ void Game::handleFinalBoss() {
                 But your journey ends here.
                 Kneel... or be reduced to ash."
 
-)";
+)" << RESET;
 std::cout<< "1.Kneel before mighty Dragon King\n";
 std::cout<< "2.Remember what he took from you, your dead wife and child, draw your weapon and charge!\n";
-std::cout<< "Choice: ";
+std::cout<< YELLOW << "Choice: " << RESET;
 int choice;
 std::cin>> choice;
 Beep(200,100);
 if(choice == 1) {
-    std::cout<< "You kneel before the Dragon King, who smirks and says\n";
-    std::cout << R"(
+    std::cout<< YELLOW << "You kneel before the Dragon King, who smirks and says\n" << RESET;
+    std::cout <<YELLOW << R"(
 🐉 Dragon King: "Coward!"
 
 His booming laughter echoes across the scorched skies.
@@ -1276,10 +1452,10 @@ In quiet resolve — you choose the final escape...
 
           💀 𝕐𝕠𝕦 𝕙𝕒𝕧𝕖 𝕗𝕒𝕝𝕝𝕖𝕟 𝕓𝕪 𝕪𝕠𝕦𝕣 𝕠𝕨𝕟 𝕙𝕒𝕟𝕕. 💀
 
-)";
+)" << RESET;
     gameOver();
 } else {
-    std::cout << R"(
+    std::cout << YELLOW << R"(
 🔥 Your hand tightens around your weapon.
    You rise, defiance burning brighter than fear.
 
@@ -1295,7 +1471,7 @@ His wings spread wide, casting a shadow that swallows the battlefield.
 
         ⚔️ 𝔸 𝕃𝔼𝔾𝔼ℕ𝔻 𝕀𝕊 𝔹𝕆ℝℕ 𝕀ℕ 𝔽𝕀ℝ𝔼 ⚔️
 
-)";
+)" << RESET;
 std::cout << "\n\nAs you charge, the ground beneath you shatters, and you are lifted into the sky!\n";
 std::cout << "You are now on the Ashen Sky Bastion!\n";
 std::cout << "Press Enter to start the final battle...\n";
@@ -1324,7 +1500,7 @@ void Game::rest() {
     std::cout << "Current gold: " << player.getGold() << "\n";
     
     if (player.getGold() < restCost) {
-        std::cout << "That's why you are a peasant! You can't afford to rest!\n";
+        std::cout << RED << "That's why you are a peasant! You can't afford to rest!\n" << RESET;
         return;
     }
     

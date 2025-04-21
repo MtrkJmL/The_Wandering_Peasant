@@ -1,6 +1,7 @@
 #include "../include/Terrain.h"
 #include <random>
 #include <ctime>
+#include <iostream>
 
 Terrain::Terrain(TerrainType type) : type(type), gen(std::random_device{}()) {
     switch (type) {
@@ -67,8 +68,10 @@ int Terrain::getHealthModifier() const {
 int Terrain::getStaminaModifier() const {
     switch (type) {
         case TerrainType::DARK_FOREST:
+            std::cout << "\nThe air grows heavier as the souls of fallen Darkbloods linger, draining your strength" << std::endl;
             return -1;
         case TerrainType::SAND_DUNES:
+            std::cout << "\nThe desert's challenges ignite a fire within you, and your body finds new strength in the heat" << std::endl;
             return 1;
         default:
             return 0;

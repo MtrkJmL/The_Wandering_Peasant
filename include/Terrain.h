@@ -7,10 +7,10 @@ enum class TerrainType {
     LAVA_FIELD,     // -2 health per turn
     ICY_VALLEY,     // 20% chance to miss attacks
     DARK_FOREST,    // -1 stamina per turn
-    SAND_DUNES,     // +1 stamina per turn
+    SAND_DUNES ,     // +1 stamina per turn
     MYSTIC,          // 50% chance to echo
     MOUNTAIN,       // +2 defense
-    RAINY_PLAINS,    // 15% chance to heal 1 HP per turn
+    RAINY_PLAINS,    // 15% chance to heal 10 HP per turn
     SKY_BASTION
 };
 

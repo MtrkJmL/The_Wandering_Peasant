@@ -2,12 +2,16 @@
 #include <iostream>
 #include <algorithm>
 
+#include <windows.h>
+#undef min
+#undef max
+
 Player::Player(const std::string& playerName)
     : name(playerName), level(1), experience(0), gold(50), luck(0),
       health(100), maxHealth(100), stamina(5), maxStamina(5),
       weapon(ItemType::WEAPON, "Rusty Sword", 1, 6, 2),
       armor(ItemType::ARMOR, "Leather Armor", 1, 6, 0),
-      experienceToNextLevel(100), briberySkill(1.0f),
+      experienceToNextLevel(100), briberySkill(1.0f), defense(1),
       equippedRelic(), equippedBlessing(), attackCount(0), isFirstAttack(true) {
 }
 
@@ -136,8 +140,8 @@ int Player::heavyAttack() {
 }
 
 int Player::rollDefense() const {
-    int defense = armor.roll() + level;
-    return equippedRelic.modifyDefense(defense);
+    int defenseRoll = armor.roll() + defense;
+    return equippedRelic.modifyDefense(defenseRoll);
 }
 
 void Player::addExperience(int amount) {
@@ -154,6 +158,9 @@ void Player::setMaxStamina(int amount) {
 void Player::setMaxHealth(int amount) {
     maxHealth += amount;
     health = maxHealth;
+}
+int Player::getDefense() const {
+    return defense;
 }
 
 int Player::getLuck() const {
@@ -184,15 +191,55 @@ void Player::levelUp() {
     level++;
     experience -= experienceToNextLevel;
     experienceToNextLevel = static_cast<int>(experienceToNextLevel * 1.6);
-    
-    maxHealth += 20;
-    health = maxHealth;
-    maxStamina += 1;
-    stamina = maxStamina;
-    
-    std::cout << "\n\n⬆️ Level Up! You are now level " << level << "!\n";
-    std::cout << "💙 Health increased to " << maxHealth << "!\n";
-    std::cout << "⚡️ Stamina increased to " << maxStamina << "!\n\n";
+
+    std::string frameTop = "╔══════════════════════════════════════════════╗";
+    std::string frameBottom = "╚══════════════════════════════════════════════╝";
+
+    std::cout << "\n\n" << frameTop << "\n";
+    std::cout << "║              ⬆️ LEVEL UP! ⬆️                 ║\n";
+    std::cout << "║        You are now level " << level;
+    if (level < 10) std::cout << " "; // spacing
+    std::cout << "!                  ║\n";
+    std::cout << "║                                              ║\n";
+    std::cout << "║    Choose a stat to upgrade:                 ║\n";
+    std::cout << "║    1. 💙 Health (+20 max health)             ║\n";
+    std::cout << "║    2. ⚡️ Stamina (+1 max stamina)            ║\n";
+    std::cout << "║    3. 🛡️ Defense (+1 defense)                ║\n";
+    std::cout << "║    4. 🔮 Luck (+5 luck)                      ║\n";
+    std::cout << frameBottom << "\n";
+
+    int choice;
+    do {
+        std::cout << "Enter choice (1-3): ";
+        std::cin >> choice;
+        Beep(200, 100);
+    } while (choice < 1 || choice > 3);
+
+    switch (choice) {
+        case 1:
+            maxHealth += 20;
+            health = maxHealth;
+            std::cout << "💙 Your health increased to " << maxHealth << "!\n";
+            break;
+        case 2:
+            maxStamina += 1;
+            stamina = maxStamina;
+            std::cout << "⚡️ Your stamina increased to " << maxStamina << "!\n";
+            break;
+        case 3:
+            defense += 1;
+            std::cout << "🛡️ Your defense increased to " << defense << "!\n";
+            break;
+        case 4:
+            luck += 5;
+            std::cout << "🔮 Your luck increased to " << luck << "!\n";
+            break;
+        default:
+            std::cout << "You decided to not upgrade any stat.\n";
+            break;
+    }
+
+    std::cout << "\n";
 }
 
 void Player::equipWeapon(const Item& newWeapon) {

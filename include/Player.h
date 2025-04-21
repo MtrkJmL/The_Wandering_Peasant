@@ -16,6 +16,7 @@ private:
     int maxHealth;
     int stamina;
     int maxStamina;
+    int defense;
     int luck;
     Item weapon;
     Item armor;
@@ -46,6 +47,7 @@ public:
     int getMaxHealth() const;
     int getStamina() const;
     int getMaxStamina() const;
+    int getDefense() const;
     const Item& getWeapon() const;
     const Item& getArmor() const;
     Item& getWeapon();
