@@ -204,16 +204,16 @@ void Player::levelUp() {
     std::cout << "║    Choose a stat to upgrade:                 ║\n";
     std::cout << "║    1. 💙 Health (+20 max health)             ║\n";
     std::cout << "║    2. ⚡️ Stamina (+1 max stamina)            ║\n";
-    std::cout << "║    3. 🛡️ Defense (+1 defense)                ║\n";
-    std::cout << "║    4. 🔮 Luck (+5 luck)                      ║\n";
+    std::cout << "║    3. 🛡️ Defense (+3 defense)                ║\n";
+    std::cout << "║    4. 🔮 Luck (+3 luck)                      ║\n";
     std::cout << frameBottom << "\n";
 
     int choice;
     do {
-        std::cout << "Enter choice (1-3): ";
+        std::cout << "Enter choice (1-4): ";
         std::cin >> choice;
         Beep(200, 100);
-    } while (choice < 1 || choice > 3);
+    } while (choice < 1 || choice > 4);
 
     switch (choice) {
         case 1:
@@ -227,11 +227,11 @@ void Player::levelUp() {
             std::cout << "⚡️ Your stamina increased to " << maxStamina << "!\n";
             break;
         case 3:
-            defense += 1;
+            defense += 3;
             std::cout << "🛡️ Your defense increased to " << defense << "!\n";
             break;
         case 4:
-            luck += 5;
+            luck += 3;
             std::cout << "🔮 Your luck increased to " << luck << "!\n";
             break;
         default:

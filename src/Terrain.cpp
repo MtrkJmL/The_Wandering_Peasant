@@ -95,6 +95,8 @@ bool Terrain::shouldEcho() const{
 }
 bool Terrain::shouldMissAttack() const {
     if (type == TerrainType::ICY_VALLEY) {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(1, 100);
         return dis(gen) <= 20; // 20% chance to miss
     }
@@ -103,6 +105,8 @@ bool Terrain::shouldMissAttack() const {
 
 bool Terrain::shouldHeal() const {
     if (type == TerrainType::RAINY_PLAINS) {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(1, 100);
         return dis(gen) <= 15; // 15% chance to heal
     }

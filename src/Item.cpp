@@ -99,6 +99,8 @@ Item::Item(ItemType type, ItemRarity rarity)
         weaponType = static_cast<WeaponType>(weaponDis(gen));
         
         name = getRarityName(rarity) + " " + getWeaponTypeName(weaponType);
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
         std::uniform_int_distribution<> statusChanceDis(1, 100);
         if (statusChanceDis(gen) <= 35) { // 35% chance to have a status effect
             std::uniform_int_distribution<> effectDis(1, 3); // skip 0 = NONE
