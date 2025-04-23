@@ -3,6 +3,16 @@
 #include <ctime>
 #include <iostream>
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+#define BOLD    "\033[1m"
+
 Relic::Relic() : name(""), description(""), rarity(RelicRarity::COMMON), isActive(false) {}
 
 Relic::Relic(const std::string& name, const std::string& description, RelicRarity rarity)
@@ -71,19 +81,19 @@ bool Relic::shouldRepeatAttack(int attackCount) const {
 
 int Relic::modifyDamage(int damage, int currentHealth, int maxHealth) const {
     if (name == "[🔵]Blood Chalice" && currentHealth < maxHealth / 2) {
-        std::cout << "You rolled a " << damage << " and Blood Chalice is active.\n";
+        std::cout << BLUE << "You rolled a " << damage << " and Blood Chalice is active.\n" << RESET;
         return damage * 1.5f;
     }
     if (name == "[🟠]Dragon's Heart") {
-        std::cout << "You rolled a " << damage << " and Dragon's Heart is active.\n";
+        std::cout << BLUE << "You rolled a " << damage << " and Dragon's Heart is active.\n" << RESET;
         return damage * 2;
     }
     if (name == "[⚪]Sharp Edge") {
-        std::cout << "You rolled a " << damage << " and Sharp Edge added 1 to it.\n";
+        std::cout << BLUE << "You rolled a " << damage << " and Sharp Edge added 1 to it.\n" << RESET;
         return damage + 1;
     }
     if (name == "[🟠]Crown of Command" && currentHealth < maxHealth / 2) {
-        std::cout << "You rolled a " << damage << " and Crown of Command is active.\n";
+        std::cout << BLUE << "You rolled a " << damage << " and Crown of Command is active.\n" << RESET;
         return damage * 3;
     }
     return damage;
@@ -99,7 +109,7 @@ bool Relic::shouldStackBleeding() const {
 
 float Relic::modifyHeavyAttackMultiplier() const {
     if (name == "[🟠]Crown of Command") {
-        std::cout << "Crown of Command is active.\n";
+        std::cout << BLUE << "Crown of Command is active.\n" << RESET;
         return 3.0f;
     }
     return 1.0f;

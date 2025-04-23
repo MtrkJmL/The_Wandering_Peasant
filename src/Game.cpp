@@ -822,66 +822,66 @@ void Game::handleNPCInteraction(NPCType type) {
                     Beep(200,100);
                     switch (songChoice) {       
                         case 1:
-                            std::cout << "Ahmed sings the Ballad of Kirik:\n";
+                            std::cout << "\nAhmed sings the Ballad of Kirik:\n";
                             std::cout << npc.getBardSongVerse(BardSong::BALLAD_OF_KIRIK) << "\n";
                             player.learnBardSong(BardSong::BALLAD_OF_KIRIK);
                             break;
                         case 2:
-                            std::cout << "Ahmed sings the Whispers of the Wyrm:\n";
+                            std::cout << "\nAhmed sings the Whispers of the Wyrm:\n";
                             std::cout << npc.getBardSongVerse(BardSong::WHISPERS_OF_THE_WYRM) << "\n";
                             player.learnBardSong(BardSong::WHISPERS_OF_THE_WYRM);
                             break;
                         case 3:
-                            std::cout << "Ahmed sings the Eclipsefire Lament:\n";
+                            std::cout << "\nAhmed sings the Eclipsefire Lament:\n";
                             std::cout << npc.getBardSongVerse(BardSong::ECLIPSEFIRE_LAMENT) << "\n";
                             player.learnBardSong(BardSong::ECLIPSEFIRE_LAMENT);
                             break;
                         case 4:
-                            std::cout << "Ahmed sings the March of the Lost Crowns:\n";     
+                            std::cout << "\nAhmed sings the March of the Lost Crowns:\n";     
                             std::cout << npc.getBardSongVerse(BardSong::MARCH_OF_THE_LOST_CROWNS) << "\n";
                             player.learnBardSong(BardSong::MARCH_OF_THE_LOST_CROWNS);
                             break;
                         case 5:
-                            std::cout << "Ahmed sings the Dirge of the Darkbloods:\n";
+                            std::cout << "\nAhmed sings the Dirge of the Darkbloods:\n";
                             std::cout << npc.getBardSongVerse(BardSong::DIRGE_OF_THE_DARKBLOODS) << "\n";
                             player.learnBardSong(BardSong::DIRGE_OF_THE_DARKBLOODS);
                             break;
                         case 6:
-                            std::cout << "Ahmed sings the Hymns from the Hollow:\n";
+                            std::cout << "\nAhmed sings the Hymns from the Hollow:\n";
                             std::cout << npc.getBardSongVerse(BardSong::HYMNS_FROM_THE_HOLLOW) << "\n"; 
                             player.learnBardSong(BardSong::HYMNS_FROM_THE_HOLLOW);
                             break;
                         case 7:
-                            std::cout << "Ahmed sings the Tavern Tune of Glory:\n";         
+                            std::cout << "\nAhmed sings the Tavern Tune of Glory:\n";         
                             std::cout << npc.getBardSongVerse(BardSong::TAVERN_TUNE_OF_GLORY) << "\n";              
                             player.learnBardSong(BardSong::TAVERN_TUNE_OF_GLORY);
                             break;
                         case 8:
-                            std::cout << "Ahmed sings the Ode to the Last Flame:\n";
+                            std::cout << "\nAhmed sings the Ode to the Last Flame:\n";
                             std::cout << npc.getBardSongVerse(BardSong::ODE_TO_THE_LAST_FLAME) << "\n";
                             player.learnBardSong(BardSong::ODE_TO_THE_LAST_FLAME);
                             break;
                         case 9:
-                            std::cout << "Ahmed sings the Dance of the Starbound:\n";
+                            std::cout << "\nAhmed sings the Dance of the Starbound:\n";
                             std::cout << npc.getBardSongVerse(BardSong::DANCE_OF_THE_STARBOUND) << "\n";
                             player.learnBardSong(BardSong::DANCE_OF_THE_STARBOUND);
                             break;
                         case 10:
-                            std::cout << "Ahmed sings the Chant of the Moonwatchers:\n";
+                            std::cout << "\nAhmed sings the Chant of the Moonwatchers:\n";
                             std::cout << npc.getBardSongVerse(BardSong::CHANT_OF_THE_MOONWATCHERS) << "\n";
                             player.learnBardSong(BardSong::CHANT_OF_THE_MOONWATCHERS);
                             break;
                         default:
-                            std::cout << "Ahmed: 'Alas, that tune is beyond my knowledge.'\n";
+                            std::cout << "\nAhmed: 'Alas, that tune is beyond my knowledge.'\n";
                             break;
                     }
                     
                     break;
                 case 4:
-                    std::cout << "Ahmed: 'Come back when you need wisdom!'\n";
+                    std::cout << "\nAhmed: 'Come back when you need wisdom!'\n";
                     break;
                 default:
-                    std::cout << "Ahmed: 'Ah… I'm afraid your words are lost on these old ears.'\n";
+                    std::cout << "\nAhmed: 'Ah… I'm afraid your words are lost on these old ears.'\n";
                     break;
             }
             break;
@@ -928,7 +928,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         std::cout << "  Relic: " << player.getEquippedRelic().getName() << " - " << player.getEquippedRelic().getDescription() << "\n\n";
         
         // Display enemy stats with hearts
-        /*
+        
         std::string enemyName;
         switch (enemy.getType()) {
             case EnemyType::GOBLIN: enemyName = "Goblin"; break;
@@ -937,10 +937,11 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             case EnemyType::BANDIT: enemyName = "Bandit"; break;
             case EnemyType::SKELETON: enemyName = "Skeleton"; break;
             case EnemyType::DRAGON: enemyName = "Dragon"; break;
+            case EnemyType::SIR_G_P_SQUIRE: enemyName = "Sir G.P.Squire"; break;
         }
-        */
         
-        std::cout << "  " << enemy.getName() << " (Level " << enemy.getLevel() << ")\n";
+        
+        std::cout << "  " << enemyName << " (Level " << enemy.getLevel() << ")\n";
         std::cout << "  Health: ";
         int enemyHearts = (enemy.getHealth() * 10) / enemy.getMaxHealth();
         for (int i = 0; i < 10; i++) {
@@ -1147,10 +1148,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                 break;
             case 4:
                 if (player.knowsEnemyType(enemy.getType())) {
-                    std::cout << enemy.getName() << ": '" << enemy.getDialogue() << "'\n";
-                    std::cout << "The " << enemy.getName() << " dropped their weapon and left.\n";
+                    std::cout << enemyName << ": '" << enemy.getDialogue() << "'\n";
+                    std::cout << "The " << enemyName << " dropped their weapon and left.\n";
                     Item drop = enemy.generateDrop(player.getLuck());
-                    std::cout << "\n" << enemy.getName() << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
+                    std::cout << "\n" << enemyName << " dropped: " << drop.getName() << " " << drop.getStatsString() << "\n";
                     std::cout << "1. Take it (equip " << (drop.getType() == ItemType::WEAPON ? "weapon" : "armor") << ")\n";
                     std::cout << "2. Leave it (sell for " << drop.getValue() << " gold)\n";
                     std::cout << "Choice: ";
@@ -1170,7 +1171,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     }
                     return;
                 } else {
-                    std::cout <<"\n" << enemy.getName() << " looks at you with a blank stare\n";
+                    std::cout <<"\n" << enemyName << " looks at you with a blank stare\n";
                 }
                 break;
             case 5: {
@@ -1181,7 +1182,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                         break;
                     } else {
                         player.addGold(-bribeCost);
-                        std::cout << "You pay the " << enemy.getName() << " " << bribeCost << " gold and it leaves.\n";
+                        std::cout << "You pay the " << enemyName << " " << bribeCost << " gold and it leaves.\n";
                     }
                     return;
                 } else {
@@ -1245,11 +1246,11 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             for(int i = 0; i < bleedStack; i++) {   
                 enemy.takeBleedingDamage();
                 
-                std::cout << RED << "Each movement deepens their wounds — blood drips to the earth below!" << enemy.getName() << " takes 2 damage from bleeding!\n" << RESET;
+                std::cout << RED << "Each movement deepens their wounds — blood drips to the earth below!" << enemyName << " takes 2 damage from bleeding!\n" << RESET;
                 if(kirikActive && player.getEquippedBlessing().getName() == "Echo of Agony"){
                     enemy.takeBleedingDamage();
                     std::cout << MAGENTA << "Champion KIRIK's ambition from battlefield shakes the heavens with thunderous might.\n" << RESET;
-                    std::cout << RED << enemy.getName() << " takes 2 damage from bleeding!\n" << RESET;
+                    std::cout << RED << enemyName << " takes 2 damage from bleeding!\n" << RESET;
                 }
             }
         }
@@ -1281,10 +1282,10 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             }
         }
         if(enemy.getHealth() <= 0) {
-            std::cout << enemy.getName() << " with a final gasp, staggers forward, as if to strike one last time...\n\n";
+            std::cout << enemyName << " with a final gasp, staggers forward, as if to strike one last time...\n\n";
             enemyRolled = 0;
         }
-        std::cout << enemy.getName() << " rolled a " << enemyRolled << " and you rolled a " << playerRolled << ".\n";
+        std::cout << enemyName << " rolled a " << enemyRolled << " and you rolled a " << playerRolled << ".\n";
         if(player.getEquippedRelic().getName() == "[⚪]Iron Heart") {
             playerRolled += 2;
             std::cout << BLUE << "Iron Heart activates!\n" << RESET;
@@ -1307,7 +1308,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
         }
         if (enemyDamage > 0) {
             player.takeDamage(enemyDamage);
-            std::cout << enemy.getName() << " lunges forward with a vicious slash!\n";
+            std::cout << enemyName << " lunges forward with a vicious slash!\n";
             std::cout << "Damage taken: " << RED << enemyDamage << RESET << "\n";
         } else {
             std::cout << "You raise your guard just in time — the attack glances off your weapon!\n";
@@ -1317,7 +1318,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             std::cout << YELLOW << "\n╔══════════════════════════════════════════════╗\n";
             std::cout <<   "║            ⚔️  VICTORY ACHIEVED! ⚔️          ║\n";
             std::cout <<   "╚══════════════════════════════════════════════╝\n" << RESET;
-            std::cout << "You defeated the " << enemy.getName() << "!\n";
+            std::cout << "You defeated the " << enemyName << "!\n";
             Beep(880, 200);
             Beep(988, 200);
             Beep(1047, 300); 
@@ -1375,7 +1376,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
     'I shall come. For glory, for answers, for...'
     )" << RESET;
-            player.equipWeapon(Item(ItemType::WEAPON, "Glorious Path Seeker", player.getLevel(), player.getMaxStamina(), player.getLuck()));
+            player.equipWeapon(Item(ItemType::WEAPON, "Glorious Path Seeker", 1, 40, player.getLuck()));
             questManager.completeQuest("4");
             player.addExperience(100);
             std::cout << "\nYou receive the Glorious Path Seeker!\n";
@@ -1391,7 +1392,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
             std::cout << RED << "\n========================================\n";
             std::cout << "            DEFEAT!                     \n";
             std::cout << "========================================\n" << RESET;
-            std::cout << "You have been defeated by the " << enemy.getName() << "!\n";
+            std::cout << "You have been defeated by the " << enemyName << "!\n";
             Beep(220, 400);  // A3 - 220 Hz, 400 ms
             Beep(174, 400);  // F3 - 174 Hz, 400 ms
             Beep(130, 400);  // C3 - 130 Hz, 400 ms (lower tone for drama)
