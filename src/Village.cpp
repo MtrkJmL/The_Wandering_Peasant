@@ -81,7 +81,7 @@ void Village::visitBlacksmith(Player& player) {
     Molto holds up a finger, cautioning you.
     'Now listen carefully. The blacksmith will likely try to dip it in molten metal—do not allow this!'
     His voice becomes more urgent.
-    'No metal! No! What it needs... is molten lava. Hotter than any forge you’ve ever seen!'"
+    'No metal! No! What it needs... is molten lava. Hotter than any forge you've ever seen!'"
     )" << std::endl;
 
             std::cout << R"(
@@ -92,12 +92,12 @@ void Village::visitBlacksmith(Player& player) {
 
             std::cout << R"(
     He leans back, tapping his foot with satisfaction.
-    'Finally, give them five gold, but take back one... for pride’s sake. Too much gold, and they’ll lose their humility.'"
+    'Finally, give them five gold, but take back one... for pride's sake. Too much gold, and they'll lose their humility.'"
     )" << std::endl;
 
             std::cout << R"(
     Molto pauses, grinning.
-    'And if the gem explodes, well... you’ll know you’ve done it right!'"
+    'And if the gem explodes, well... you'll know you've done it right!'"
     )" << std::endl;
 
             std::cout << R"(
@@ -151,29 +151,37 @@ void Village::visitShrine(Player& player) {
     int choice;
     std::cin >> choice;
     std::vector<Blessing> blessings;
+    std::vector<Blessing> allBlessings;
 
     switch (choice) {
         case 1:
-            player.setMaxStamina(-4);
-            blessings.push_back(Blessing::generateKirikBlessing());
-            do {
-                blessings.push_back(Blessing::generateKirikBlessing());
-            } while (blessings[1].getName() == blessings[0].getName());
+            if(player.getMaxStamina() - 4 < 1){
+                std::cout << "You cannot sacrifice more stamina than you have.\n";
+                return;
+            }
+            player.setMaxStamina(- 4);
+            allBlessings = Blessing::getAllKirikBlessings();
             break;
         case 2:
-            player.setMaxHealth(-40);
-            blessings.push_back(Blessing::generateBerxesBlessing());
-            do {
-                blessings.push_back(Blessing::generateBerxesBlessing());
-            } while (blessings[1].getName() == blessings[0].getName());
+            if(player.getMaxHealth() - 40 < 1){
+                std::cout << "You cannot sacrifice more health than you have.\n";
+                return;
+            }
+            player.setMaxHealth(- 40);
+            allBlessings = Blessing::getAllBerxesBlessings();
             break;
         case 3:
-            player.setMaxHealth(-25);
-            player.setMaxStamina(-2);
-            blessings.push_back(Blessing::generateStadinBlessing());
-            do {
-                blessings.push_back(Blessing::generateStadinBlessing());
-            } while (blessings[1].getName() == blessings[0].getName());
+            if(player.getMaxHealth() - 25 < 1){
+                std::cout << "You cannot sacrifice more health than you have.\n";
+                return;
+            }
+            if(player.getMaxStamina() - 2 < 1){
+                std::cout << "You cannot sacrifice more stamina than you have.\n";
+                return;
+            }
+            player.setMaxHealth(- 25);
+            player.setMaxStamina(- 2);
+            allBlessings = Blessing::getAllStadinBlessings();
             break;
         case 4:
             std::cout << "You leave the shrine.\n";
@@ -183,13 +191,14 @@ void Village::visitShrine(Player& player) {
             return;
     }
 
-    // Prevent duplicate blessings
-    if (blessings[0].getName() == blessings[1].getName()) {
-        // Replace second with a new one if same
-        if (choice == 1) blessings[1] = Blessing::generateKirikBlessing();
-        else if (choice == 2) blessings[1] = Blessing::generateBerxesBlessing();
-        else blessings[1] = Blessing::generateStadinBlessing();
-    }
+    // Shuffle the blessings
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(allBlessings.begin(), allBlessings.end(), g);
+
+    // Take the first two different ones
+    blessings.push_back(allBlessings[0]);
+    blessings.push_back(allBlessings[1]);
 
     std::cout << "\nChoose your blessing:\n";
     std::cout << "1. " << blessings[0].getName() << " – " << blessings[0].getDescription() << "\n";
@@ -372,7 +381,7 @@ void Village::talkToBartender(Player& player) {
         case 2:
             {
                 // Handle the purchase of a drink (add your logic for drinks)
-                std::cout << "You buy a drink from the bartender. It’s a strong, bitter ale.\n";
+                std::cout << "You buy a drink from the bartender. It's a strong, bitter ale.\n";
                 player.spendGold(5);  // Example: assume drinks cost 5 gold
                 std::cout << "Your gold: " << player.getGold() << "\n";
             }
@@ -489,10 +498,10 @@ void Village::talkToNPCs(Player& player) {
         std::cout << R"(
         A man with a scar on his face looks you up and down, noticing your boots. He sneers and spits on the floor.
         "Nice boots, peasant!" he laughs mockingly. "You think those will save you in this harsh world? 
-        I’ve seen men with better boots, and none of ‘em were alive by sunset!"
+        I've seen men with better boots, and none of 'em were alive by sunset!"
         
         He leans in closer, his voice dropping to a serious tone.
-        "I’ll make you a deal. You give me that boots of yours, and I'll trade you something far more valuable—a weapon once owned by a champion of Zmar. 
+        "I'll make you a deal. You give me that boots of yours, and I'll trade you something far more valuable—a weapon once owned by a champion of Zmar. 
         Also, a relic to protect you from the dangers of the world. You game for that?"
         )" << std::endl;
 
@@ -526,7 +535,7 @@ void Village::talkToNPCs(Player& player) {
 
             You look up to see the mysterious figure disappearing into the shadows, the banner of Stadin's Clan fluttering behind him.
 
-            Damn. Not only have you lost your boots, but you’ve likely made an enemy of a clan more dangerous than you imagined.
+            Damn. Not only have you lost your boots, but you've likely made an enemy of a clan more dangerous than you imagined.
             )" << std::endl;
             std::cout << R"(
             However, the patron tosses something small at your feet with a twisted smile.
@@ -540,9 +549,9 @@ void Village::talkToNPCs(Player& player) {
         std::cout << "\nYou gained 60 experience.\n" << std::endl;
     }
     std::cout << R"(You approach the table with the confidence of a seasoned hero—only to be met with blank stares.
-        A grizzled dwarf squints at you and mutters, "Table’s full... of people who bathe."
+        A grizzled dwarf squints at you and mutters, "Table's full... of people who bathe."
         Laughter follows, and someone silently slides a crusty potato toward you.
-        It’s warm. It’s whispering.
+        It's warm. It's whispering.
 
         For a moment, you wonder if it's a relic… but no, it's even more useless than the fabled Stadin Relic.
         You leave with dignity. And the potato.)" << "\n";

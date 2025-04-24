@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 enum class BlessingRarity {
     KIRIK,
@@ -29,4 +30,9 @@ public:
     static Blessing generateKirikBlessing();
     static Blessing generateBerxesBlessing();
     static Blessing generateStadinBlessing();
+    
+    // New functions to get all blessings
+    static std::vector<Blessing> getAllKirikBlessings();
+    static std::vector<Blessing> getAllBerxesBlessings();
+    static std::vector<Blessing> getAllStadinBlessings();
 }; 

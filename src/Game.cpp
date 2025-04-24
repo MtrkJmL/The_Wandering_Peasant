@@ -649,7 +649,7 @@ void Game::handleNPCInteraction(NPCType type) {
             switch (blacksmithChoice) {
                 case 1:
                     if (player.getGold() >= static_cast<int>(100/player.getBriberySkill())) {
-                        player.addGold(-static_cast<int>(100/player.getBriberySkill()));
+                        player.spendGold(static_cast<int>(100/player.getBriberySkill()));
                         player.getWeapon().addModifier(2);
                         std::cout << "Your weapon has been upgraded! Sharper than ever!\n";
                     } else {
@@ -658,7 +658,7 @@ void Game::handleNPCInteraction(NPCType type) {
                     break;
                 case 2:
                     if (player.getGold() >= static_cast<int>(100/player.getBriberySkill())) {
-                        player.addGold(-static_cast<int>(100/player.getBriberySkill()));
+                        player.spendGold(static_cast<int>(100/player.getBriberySkill()));
                         player.getArmor().addModifier(2);
                         std::cout << "Your armor has been upgraded! Sturdier than ever!\n";
                     } else {
@@ -690,7 +690,7 @@ void Game::handleNPCInteraction(NPCType type) {
             switch (choice) {
                 case 1:
                     if (player.getGold() >= static_cast<int>(50/player.getBriberySkill())) {
-                        player.addGold(-static_cast<int>(50/player.getBriberySkill()));
+                        player.spendGold(static_cast<int>(50/player.getBriberySkill()));
                         player.heal(100);
                         std::cout << "You bought a health potion and restored 100 health!\n";
                     } else {
@@ -699,7 +699,7 @@ void Game::handleNPCInteraction(NPCType type) {
                     break;
                 case 2:
                     if (player.getGold() >= static_cast<int>(200/player.getBriberySkill())) {
-                        player.addGold(-static_cast<int>(200/player.getBriberySkill()));
+                        player.spendGold(static_cast<int>(200/player.getBriberySkill()));
                         player.getWeapon().addDice();
                         std::cout << "You used the weapon upgrade scroll!\n";
                     } else {
@@ -708,8 +708,8 @@ void Game::handleNPCInteraction(NPCType type) {
                     break;
                 case 3:
                     if (player.getGold() >= static_cast<int>(200/player.getBriberySkill())) {
-                        player.addGold(-static_cast<int>(200/player.getBriberySkill()));
-                        player.getArmor().addModifier(1);
+                        player.spendGold(static_cast<int>(200/player.getBriberySkill()));
+                        player.getArmor().addDice();
                         std::cout << "You used the armor upgrade scroll!\n";
                     } else {
                         std::cout << "Not enough gold!\n";
@@ -1181,7 +1181,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                         std::cout << "'You dare barter with royalty?' it hisses. 'Your gold is dust compared to mine.'\n";
                         break;
                     } else {
-                        player.addGold(-bribeCost);
+                        player.spendGold(bribeCost);
                         std::cout << "You pay the " << enemyName << " " << bribeCost << " gold and it leaves.\n";
                     }
                     return;

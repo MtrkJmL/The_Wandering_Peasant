@@ -55,4 +55,25 @@ Blessing Blessing::generateStadinBlessing() {
     };
     
     return stadinBlessings[std::rand() % stadinBlessings.size()];
+}
+
+std::vector<Blessing> Blessing::getAllKirikBlessings() {
+    return {
+        Blessing("Echo of Agony", "All status effects are activated twice", BlessingRarity::KIRIK),
+        Blessing("Pierce the Veil", "Apply all status effects to the enemy", BlessingRarity::KIRIK)
+    };
+}
+
+std::vector<Blessing> Blessing::getAllBerxesBlessings() {
+    return {
+        Blessing("Titan's Wrath", "Your next attack deals triple damage, but you sacrifice 35 health", BlessingRarity::BERXES),
+        Blessing("Crushing Momentum", "Next turn, you will heal for the amount of damage you deal", BlessingRarity::BERXES)
+    };
+}
+
+std::vector<Blessing> Blessing::getAllStadinBlessings() {
+    return {
+        Blessing("Stillness of Stone", "Add +20 defense for next 3 turns", BlessingRarity::STADIN),
+        Blessing("Stadin Life", "Recover 50 health", BlessingRarity::STADIN)
+    };
 } 
