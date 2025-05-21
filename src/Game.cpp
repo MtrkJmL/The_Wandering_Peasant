@@ -197,7 +197,24 @@ void Game::startNewGame() {
             std::cout << "You decided to start with no relic or with whatever you already have from your past\n";
             break;
     }
+    std::cout << R"(
     
+    The morning mist clings to your boots as you leave the smoldering fields behind.
+
+    No knighthood claims you. No bard will sing your name — not yet.
+    Just a peasant with ash in your lungs and vengeance in your heart.
+
+    But Peasaterra is no longer a land of peace.
+    The roads are choked with goblin raiders and greedy toll-keepers.
+    Bribes buy silence, and dragons burn villages for sport.
+
+    Taverns whisper of cursed forests, talking wolves, and a black-winged terror reborn.
+    Beneath it all, merchants trade more in secrets than silver, and old powers stir in the deep.
+
+    You pack your last loaf of bread. Tighten the straps on your father’s rusted blade.
+    Then take your first step toward the unknown — and toward the one who burned your world.
+
+    )";
     while (player.isAlive() && isRunning) {
         std::cout << YELLOW << "\n=== What will " << player.getName() << " do now? ===\n" << RESET;
         std::cout << "1. Wander around more\n";
@@ -1040,7 +1057,7 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
                     }
                     
                     // Sleep for animation
-                    std::this_thread::sleep_for(std::chrono::milliseconds(40/enemy.getLevel()));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(40/choice*enemy.getLevel()));
                 }
                 Beep(150,200);
                 // Restore terminal settings
@@ -1376,10 +1393,17 @@ void Game::handleEncounter(Enemy& enemy, Terrain& terrain) {
 
     'I shall come. For glory, for answers, for...'
     )" << RESET;
-            player.equipWeapon(Item(ItemType::WEAPON, "Glorious Path Seeker", 1, 40, player.getLuck()));
+            std::cout << "\nDo you want to take Glorious Path Seeker? (y/n)\n";
+            int gps;
+            std::cin >> gps; 
+            Beep(200,100);
+            if((gps == 'y' || gps == 'Y')){
+                player.equipWeapon(Item(ItemType::WEAPON, "Glorious Path Seeker", 1, 20, player.getLuck()));
+                std::cout << "\nYou receive the Glorious Path Seeker!\n";
+                }
             questManager.completeQuest("4");
             player.addExperience(100);
-            std::cout << "\nYou receive the Glorious Path Seeker!\n";
+            
             std::cout << "\nYou gained 100 experience.\n" << std::endl;
             break;
             }

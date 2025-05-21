@@ -204,7 +204,7 @@ void Player::levelUp() {
     std::cout << "║    Choose a stat to upgrade:                 ║\n";
     std::cout << "║    1. 💙 Health (+20 max health)             ║\n";
     std::cout << "║    2. ⚡️ Stamina (+1 max stamina)            ║\n";
-    std::cout << "║    3. 🛡️ Defense (+3 defense)                ║\n";
+    std::cout << "║    3. 🛡️ Defense (+2 defense)                ║\n";
     std::cout << "║    4. 🔮 Luck (+3 luck)                      ║\n";
     std::cout << frameBottom << "\n";
 
@@ -227,7 +227,7 @@ void Player::levelUp() {
             std::cout << "⚡️ Your stamina increased to " << maxStamina << "!\n";
             break;
         case 3:
-            defense += 3;
+            defense += 2;
             std::cout << "🛡️ Your defense increased to " << defense << "!\n";
             break;
         case 4:
@@ -383,7 +383,7 @@ float Player::getTimingMultiplier(int cursorPosition, int totalPositions) const 
     float maxDistance = center;
     
     // Scale from 1.0 (worst) to 2.0 (best)
-    return 1.0f + (1.0f - 1.25f*(distanceFromCenter / maxDistance));
+    return 1.0f + (1.0f - 2.0f*(distanceFromCenter / maxDistance));
 }
 
 int Player::timingBasedAttack(int cursorPosition, int totalPositions, bool isHeavyAttack, bool& isCrit) {
@@ -405,7 +405,7 @@ int Player::timingBasedAttack(int cursorPosition, int totalPositions, bool isHea
     std::cout << "You rolled a " << baseDamage << ".\n";
 
     if (isHeavyAttack) {
-        baseDamage = static_cast<int>(baseDamage * 1.5f);
+        baseDamage = static_cast<int>(baseDamage * 1.35f);
         std::cout << "Heavy attack damage: " << baseDamage << "\n";
     }
     
